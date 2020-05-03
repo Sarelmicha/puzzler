@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 class ImagePiece {
 
   int index;
-  Image image;
+  ClipRRect image;
 
   ImagePiece({@required this.index,@required this.image});
 

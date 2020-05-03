@@ -44,8 +44,9 @@ class _WaitingScreenState extends State<WaitingScreen> {
     Navigator.of(context)
         .push(MaterialPageRoute(builder: (_) => GameScreen(
       numOfRows: widget.numOfRows,
-      startTime: 10,
+      startTime: 60,
       imagePieceBloc: imagePieceBloc,
+      imagePath: 'https://image.shutterstock.com/image-photo/montreal-canada-july-11-2019-600w-1450023539.jpg',
       cellBloc: cellBloc,)));
   }
 

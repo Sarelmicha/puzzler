@@ -10,9 +10,9 @@ class PuzzleChat extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<CellBloc>(
-      bloc: CellBloc(numOfRows: 3),
+      bloc: CellBloc(numOfRows: 4),
       child: MaterialApp(
-        home: WaitingScreen(numOfRows: 3),
+        home: WaitingScreen(numOfRows: 4),
       ),
     );
   }

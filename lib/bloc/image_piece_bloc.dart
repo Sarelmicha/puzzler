@@ -28,7 +28,7 @@ class ImagePieceBloc implements Bloc {
 
     int numOfPieces = numOfRows * numOfRows;
 
-    List<Image> images = splitImage(imageData);
+    List<ClipRRect> images = splitImage(imageData);
 
     if(images.isEmpty){
       return;
@@ -71,7 +71,7 @@ class ImagePieceBloc implements Bloc {
     _controller.close();
   }
 
-  List<Image> splitImage(List<int> input) {
+  List<ClipRRect> splitImage(List<int> input) {
 
     if(input == null){
       return [];
@@ -96,14 +96,16 @@ class ImagePieceBloc implements Bloc {
     }
 
     // convert image from image package to Image Widget to display
-    List<Image> output = List<Image>();
+    List<ClipRRect> output = List<ClipRRect>();
     for (var img in parts) {
-      output.add(Image.memory(
-          imglib.encodeJpg(img),
-        fit: BoxFit.fill,
+      output.add(ClipRRect(
+        borderRadius: BorderRadius.circular(8.0),
+        child: Image.memory(
+            imglib.encodeJpg(img),
+          fit: BoxFit.fill,
+        ),
       ));
     }
-
 
     return output;
   }

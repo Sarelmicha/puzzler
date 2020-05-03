@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:puzzlechat/bloc/bloc_provider.dart';
 import 'package:puzzlechat/bloc/cell_bloc.dart';
 import 'package:puzzlechat/bloc/image_piece_bloc.dart';
@@ -16,24 +17,27 @@ class GameScreen extends StatefulWidget {
   final int startTime;
   final ImagePieceBloc imagePieceBloc;
   final CellBloc cellBloc;
-  GameScreen({this.numOfRows, this.startTime,this.imagePieceBloc,this.cellBloc});
+  final String imagePath;
+  GameScreen(
+      {this.numOfRows,
+      this.startTime,
+      this.imagePieceBloc,
+      this.cellBloc,
+      this.imagePath});
 
   @override
   _GameScreenState createState() => _GameScreenState();
 }
 
 class _GameScreenState extends State<GameScreen> {
-
   List<ImagePiece> orderImagePieces;
   List<ImagePiece> inorderImagePieces;
   bool orderImagesHasSet = false;
   Timer timer;
   TimerBloc timerBloc;
 
-
   @override
   void initState() {
-
     timerBloc = TimerBloc(startTime: widget.startTime);
     //Start timer
     timer =
@@ -43,20 +47,50 @@ class _GameScreenState extends State<GameScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-      backgroundColor: Color(0xff1b1e31),
+      backgroundColor: Colors.white,
       body: Column(
-        children: <Widget>[ 
-          Expanded(child: Align(
-            alignment: Alignment.center,
-              child: TimerWidget(timerBloc: timerBloc, startTime: widget.startTime))),
-
+        children: <Widget>[
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.purple,
+                      blurRadius:
+                          20.0, // has the effect of softening the shadow
+                      spreadRadius:
+                          1.0, // has the effect of extending the shadow
+                      offset: Offset(
+                        5.0, // horizontal, move right 10
+                        5.0, // vertical, move down 10
+                      ),
+                    )
+                  ],
+                  borderRadius: BorderRadius.only(bottomLeft: Radius.circular(100.0)),
+                  gradient: LinearGradient(
+                      begin: Alignment.topRight,
+                      end: Alignment.bottomLeft,
+                      colors: [Colors.purple, Colors.purpleAccent]
+                  )
+              ),
+              width: double.infinity,
+              height: double.infinity,
+              padding: EdgeInsets.all(5.0),
+              child: Align(
+                alignment: Alignment.center,
+                  child: TimerWidget(timerBloc: timerBloc, startTime: widget.startTime)),
+            ),
+          ),
+          SizedBox(
+           height: 20.0,
+          ),
           _buildBoard(context, widget.numOfRows, widget.imagePieceBloc),
           SizedBox(
             height: 20.0,
           ),
-          _buildImagePieceContainer(context, widget.numOfRows, widget.imagePieceBloc),
+          _buildImagePieceContainer(
+              context, widget.numOfRows, widget.imagePieceBloc),
         ],
       ),
     );
@@ -64,15 +98,25 @@ class _GameScreenState extends State<GameScreen> {
 
   Widget _buildBoard(
       BuildContext context, int numOfRows, ImagePieceBloc imagePieceBloc) {
-
-
-    return Container(
-        width: 320.0,
-        height: 320.0,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-        ),
-        child: _buildCellStreamBuilder(numOfRows)
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 10.0),
+      child: Container(
+          width: double.infinity,
+          height: 340.0,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black,
+                blurRadius: 3.0,
+              ),
+            ],
+            border: Border.all(
+              color: Colors.purpleAccent,
+              width: 2.0,
+            ),
+          ),
+          child: _buildCellStreamBuilder(numOfRows)),
     );
   }
 
@@ -109,15 +153,33 @@ class _GameScreenState extends State<GameScreen> {
       bloc: imagePieceBloc,
       child: Flexible(
         child: Container(
-            padding: EdgeInsets.all(12.0),
-            width: double.infinity,
-            height: 100.0,
-            margin: EdgeInsets.symmetric(horizontal: 20.0),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-            ),
-            child: _buildImagePieceStreamBuilder(imagePieceBloc, numOfRows)),
+          decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.purple,
+                  blurRadius: 20.0, // has the effect of softening the shadow
+                  spreadRadius: 5.0, // has the effect of extending the shadow
+                  offset: Offset(
+                    10.0, // horizontal, move right 10
+                    10.0, // vertical, move down 10
+                  ),
+                )
+              ],
+              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+              gradient: LinearGradient(
+                  begin: Alignment.topRight,
+                  end: Alignment.bottomLeft,
+                  colors: [Colors.purple, Colors.purpleAccent])),
+          width: double.infinity,
+          height: double.infinity,
+          padding: EdgeInsets.all(5.0),
+          child: Container(
+              padding: EdgeInsets.all(20.0),
+              width: double.infinity,
+              height: 100.0,
+              margin: EdgeInsets.symmetric(horizontal: 20.0),
+              child: _buildImagePieceStreamBuilder(imagePieceBloc, numOfRows)),
+        ),
       ),
     );
   }
@@ -132,12 +194,12 @@ class _GameScreenState extends State<GameScreen> {
         if (!snapshot.hasData) {
           return Center(
               child: Text(
-                  'Loading...',
-              style: TextStyle(
-                fontSize: 10.0,
-                fontWeight: FontWeight.bold,
-              ),)
-          );
+            'Loading...',
+            style: TextStyle(
+              fontSize: 10.0,
+              fontWeight: FontWeight.bold,
+            ),
+          ));
         }
 
         if (!orderImagesHasSet) {
@@ -161,23 +223,31 @@ class _GameScreenState extends State<GameScreen> {
         return LongPressDraggable<int>(
           data: imagePiece.index,
           child: widget.cellBloc.cells[imagePiece.index].isFilled
-              ? Container(width: 100, height: 100)
-              : ImagePieceWidget(imagePiece: imagePiece),
-          feedback: ImagePieceWidget(imagePiece: imagePiece),
-          childWhenDragging: ImagePieceWidget(imagePiece: imagesPieces[0]),
+              ? Container(width: 0, height: 0)
+              : ImagePieceWidget(
+                  imagePiece: imagePiece,
+                  margin: EdgeInsets.all(5.0),
+                ),
+          feedback: ImagePieceWidget(
+            imagePiece: imagePiece,
+            margin: EdgeInsets.all(5.0),
+          ),
+          childWhenDragging: Container(width: 0, height: 0),
         );
       },
     );
   }
 
   DragTarget _buildDragTarget(
-      int index,) {
+    int index,
+  ) {
     return DragTarget<int>(
       builder: (BuildContext context, List<int> incoming, List rejected) {
         if (widget.cellBloc.cells[index].isFilled) {
           return CellWidget(
             child: ImagePieceWidget(
               imagePiece: orderImagePieces[index],
+              margin: EdgeInsets.all(0),
             ),
           );
         } else {
@@ -186,16 +256,16 @@ class _GameScreenState extends State<GameScreen> {
           );
         }
       },
-      onWillAccept: (imagePieceIndex) => imagePieceIndex == widget.cellBloc.cells[index].index,
+      onWillAccept: (imagePieceIndex) =>
+          imagePieceIndex == widget.cellBloc.cells[index].index,
       onAccept: (imagePieceIndex) {
         widget.cellBloc.fillCell(imagePieceIndex);
         widget.imagePieceBloc.deleteImage(imagePieceIndex);
-        if(widget.cellBloc.isWin()){
+        if (widget.cellBloc.isWin()) {
           print('user win');
-          //TODO- do somthing when win
+//          _saveScreen();
         }
       },
     );
   }
-
 }

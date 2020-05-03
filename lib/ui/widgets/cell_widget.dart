@@ -16,11 +16,7 @@ class CellWidget extends StatelessWidget {
         width: 100.0,
         height: 100.0,
         child: child,
-       decoration: BoxDecoration(
-         color: Colors.white, borderRadius: BorderRadius.all(Radius.circular(10)),
-          border: Border.all(
-              color: Colors.black)
-      ),
+        color: Colors.white,
     );
   }
 }
