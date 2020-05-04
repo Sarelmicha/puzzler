@@ -16,7 +16,7 @@ class CellBloc implements Bloc {
 
   CellBloc({this.numOfRows});
 
-  void createCells() {
+  Future<void> createCells() async {
 
     int numOfCells = numOfRows * numOfRows;
 

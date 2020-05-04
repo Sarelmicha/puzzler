@@ -62,26 +62,6 @@ class TimerWidget extends StatelessWidget {
           borderRadius: 5.0,
           color: Colors.purple
         );
-
-        return Container(
-          child:  CircleAvatar(
-            child: Text(
-              snapshot.data.toString(),
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 30.0,
-              ),
-            ),
-          ),
-          width: 80.0,
-          height: 80.0,
-          padding: EdgeInsets.all(2.0), // border width
-          decoration: BoxDecoration(
-            color: Colors.white, // border color
-            shape: BoxShape.circle,
-          ),
-        );
       },
     );
   }

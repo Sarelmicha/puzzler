@@ -27,6 +27,7 @@ dependencies:
   circular_countdown: ^0.1.0
   image_gallery_saver: ^1.2.2
   argon_buttons_flutter: ^1.0.2
+  google_fonts: ^1.0.0
 
 dev_dependencies:
 #  flutter_test:

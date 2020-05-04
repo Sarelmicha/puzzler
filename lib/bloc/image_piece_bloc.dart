@@ -22,7 +22,7 @@ class ImagePieceBloc implements Bloc {
   final _controller = StreamController<List<ImagePiece>>();
   Stream<List<ImagePiece>> get stream => _controller.stream;
 
-  void createImagePieces(int numOfRows) {
+  Future<void> createImagePieces() async{
 
     print('now in fumc imageData is $imageData');
 
