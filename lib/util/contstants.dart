@@ -35,6 +35,15 @@ const kPageHeaderStyle = TextStyle(
   fontWeight: FontWeight.w900,
 );
 
+const kLogoTextStyle = TextStyle(
+
+      fontFamily: 'Great Vibes',
+      color: Colors.white,
+      fontSize: 55.0,
+      fontWeight: FontWeight.bold
+
+);
+
 final Shader kLinearGradient = LinearGradient(
   colors: <Color>[Colors.purpleAccent,Colors.pinkAccent],
 ).createShader(Rect.fromLTWH(0.0, 0.0, 200.0, 70.0)

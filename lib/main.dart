@@ -13,7 +13,7 @@ class PuzzleChat extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: BlocProvider(
+      home: BlocProvider<AuthBloc>(
         create: (context) => AuthBloc()..add(AppStartedEvent()),
         child: App(),
       ),

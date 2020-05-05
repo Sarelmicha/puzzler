@@ -3,6 +3,7 @@ import 'package:puzzlechat/data/game_data.dart';
 import 'package:puzzlechat/ui/screens/create_game_screen.dart';
 import 'package:puzzlechat/ui/screens/splash_screen.dart';
 import 'package:puzzlechat/ui/widgets/rounded_button.dart';
+import 'package:puzzlechat/util/navigator_helper.dart';
 
 class ContactTile extends StatelessWidget {
 
@@ -27,10 +28,7 @@ class ContactTile extends StatelessWidget {
             width: 30,
             height: 20,
             onPressed: (){
-//              Navigator.pushNamed(
-//                  context,
-//                  CreateGameScreen.id
-//              );
+              NavigatorHelper.navigateToCreateGameScreen(context);
             },
           ),
     );

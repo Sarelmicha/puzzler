@@ -5,5 +5,9 @@ abstract class AuthEvent extends Equatable{}
 class AppStartedEvent extends AuthEvent {
   @override
   List<Object> get props => null;
+}
 
+class LogoutButtonHasBeenPressed extends AuthEvent {
+  @override
+  List<Object> get props => null;
 }

@@ -5,15 +5,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:puzzlechat/bloc/reg_bloc/user_reg_bloc.dart';
 import 'package:puzzlechat/bloc/reg_bloc/user_reg_event.dart';
 import 'package:puzzlechat/bloc/reg_bloc/user_reg_state.dart';
-import 'package:puzzlechat/ui/screens/lobby_screen.dart';
-import 'package:puzzlechat/ui/screens/splash_screen.dart';
 import 'package:puzzlechat/ui/widgets/form_widget.dart';
 import 'package:puzzlechat/ui/widgets/rounded_button.dart';
+import 'package:puzzlechat/util/navigator_helper.dart';
 
 class SignupPageParent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
+    return BlocProvider<UserRegBloc>(
       create: (context) => UserRegBloc(),
       child: SignupScreen(),
     );
@@ -82,12 +81,12 @@ class _SignupScreenState extends State<SignupScreen> {
                 listener: (context, state) {
 
                   if (state is UserLoadingState) {
-                    navigateToSplashScreen(context);
+                    NavigatorHelper.navigateToSplashScreen(context);
                   } else if (state is UserRegSuccessful) {
-                    navigateToLobbyScreen(context, state.user);
+                    NavigatorHelper.navigateToLobbyScreen(context, state.user);
                   }
                   else if (state is UserRegFailure) {
-                    navigateBackToSignUpScreen(context);
+                    NavigatorHelper.navigateBackToCurrentScreen(context);
                   }
                 },
                 child: BlocBuilder<UserRegBloc, UserRegState>(
@@ -131,20 +130,4 @@ class _SignupScreenState extends State<SignupScreen> {
       ),
     ));
   }
-
-  void navigateToLobbyScreen(BuildContext context, FirebaseUser user) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-      return LobbyScreenParent(currentUser: user);
-    }));
-  }
-
-   void navigateBackToSignUpScreen(BuildContext context) {
-     Navigator.pop(context);
-   }
-
-   void navigateToSplashScreen(BuildContext context) {
-     Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-       return SplashScreen();
-     }));
-   }
 }

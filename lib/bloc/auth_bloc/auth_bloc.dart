@@ -33,9 +33,11 @@ class AuthBloc extends Bloc<AuthEvent,AuthState> {
       } catch (e) {
         yield UnAuthenticatedState();
       }
+    } else if(event is LogoutButtonHasBeenPressed){
+      userRepository.signOut();
+      yield UnAuthenticatedState();
     }
   }
-
 }
 
 

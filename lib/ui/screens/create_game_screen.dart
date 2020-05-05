@@ -1,12 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:puzzlechat/ui/screens/game_screen.dart';
-import 'package:puzzlechat/ui/widgets/custom_drop_down.dart';
-import 'package:puzzlechat/ui/widgets/rounded_button.dart';
+import 'package:dotted_border/dotted_border.dart';
 import 'package:puzzlechat/util/contstants.dart';
 
 class CreateGameScreen extends StatefulWidget {
-
   @override
   _CreateGameScreenState createState() => _CreateGameScreenState();
 }
@@ -20,49 +17,91 @@ class _CreateGameScreenState extends State<CreateGameScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Center(
-      child: Container(
-        decoration: BoxDecoration(
-            gradient: LinearGradient(
-                begin: Alignment.topRight,
-                end: Alignment.bottomLeft,
-                colors: [Colors.purpleAccent, Colors.pinkAccent]
-            )
+      appBar: AppBar(
+        title:  Text(
+          'Puzzler',
+          style: kLogoTextStyle.copyWith(
+            fontSize: 30.0
+          )
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Row(
-              children: <Widget>[
-//                GridView.count(
-//                  primary: false,
-//                  padding: const EdgeInsets.all(0),
-//                  crossAxisSpacing: 0,
-//                  mainAxisSpacing: 0,
-//                  crossAxisCount: numOfRows,
-//                  children: pieces,
-//                ),
-                Column(
-                  children: <Widget>[
-                    CircleAvatar(
-                      child: Icon(Icons.camera_alt),
-                    ),
-                    CustomDropDown(items: [9, 16, 25, 36], onChanged: () {}),
-                    CustomDropDown(items: [30, 60, 90, 120], onChanged: () {}),
-                  ],
-                ),
-              ],
+        backgroundColor: Colors.purpleAccent,
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.notifications,
+              color: Colors.white,
             ),
-            RoundedButton(
-                text: "Send",
-                width: 200,
-                height: 200,
-                onPressed: () {
-//                  Navigator.pushNamed(context, GameScreen.id);
-                }),
-          ],
+            onPressed: () {
+              // do something
+            },
+          ),
+          IconButton(
+            icon: Icon(
+              Icons.settings,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              // do something
+            },
+          ),
+          IconButton(
+            icon: Icon(
+              Icons.exit_to_app,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              // do something
+            },
+          )
+        ],
+      ),
+      body: Container(
+        height: double.infinity,
+        width: double.infinity,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+              begin: Alignment.topRight,
+              end: Alignment.bottomLeft,
+              colors: [Colors.purpleAccent, Colors.pinkAccent]),
+        ),
+        child: Center(
+          child: DottedBorder(
+            padding: EdgeInsets.all(20),
+            color: Colors.white,
+            strokeWidth: 3,
+            child: Padding(
+              padding: EdgeInsets.all(50.0),
+              child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      'Smile!',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 40.0,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      height: 20.0,
+                    ),
+                    IconButton(
+                      padding: EdgeInsets.zero,
+                      icon: Icon(
+                        Icons.camera_alt,
+                        color: Colors.white,
+                        size: 80,
+                      ),
+                      onPressed: () {
+                        // do something
+                      },
+                    ),
+                  ]),
+            ),
+          ),
         ),
       ),
-    ));
+    );
   }
 }
