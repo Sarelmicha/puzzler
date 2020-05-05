@@ -20,13 +20,26 @@ class SignupPageParent extends StatelessWidget {
   }
 }
 
-class SignupScreen extends StatelessWidget {
+class SignupScreen extends StatefulWidget {
+
+  @override
+  _SignupScreenState createState() => _SignupScreenState();
+}
+
+class _SignupScreenState extends State<SignupScreen> {
 
    TextEditingController emailController = TextEditingController();
    TextEditingController passwordController = TextEditingController();
    UserRegBloc userRegBloc;
 
-  @override
+
+   @override
+   void dispose() {
+     super.dispose();
+     userRegBloc.close();
+   }
+
+   @override
   Widget build(BuildContext context) {
 
     userRegBloc = BlocProvider.of<UserRegBloc>(context);
@@ -55,7 +68,7 @@ class SignupScreen extends StatelessWidget {
               SizedBox(
                 height: 10.0,
               ),
-              
+
               Flexible(
                 child: Text(
                   "It's free and only takes a minute",
@@ -121,7 +134,7 @@ class SignupScreen extends StatelessWidget {
 
   void navigateToLobbyScreen(BuildContext context, FirebaseUser user) {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-      return LobbyScreen(currentUser: user);
+      return LobbyScreenParent(currentUser: user);
     }));
   }
 

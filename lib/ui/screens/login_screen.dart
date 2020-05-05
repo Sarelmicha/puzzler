@@ -8,13 +8,10 @@ import 'package:puzzlechat/bloc/login_bloc/login_state.dart';
 import 'package:puzzlechat/ui/screens/signup_screen.dart';
 import 'package:puzzlechat/ui/screens/splash_screen.dart';
 import 'package:puzzlechat/ui/widgets/form_widget.dart';
-import 'package:puzzlechat/ui/widgets/icon_text_field.dart';
 import 'package:puzzlechat/ui/widgets/rounded_button.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'lobby_screen.dart';
-
-
 
 class LoginScreenParent extends StatelessWidget {
   @override
@@ -26,11 +23,24 @@ class LoginScreenParent extends StatelessWidget {
   }
 }
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
+
+  @override
+  _LoginScreenState createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
 
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   LoginBloc loginBloc;
+
+
+  @override
+  void dispose() {
+    super.dispose();
+    loginBloc.close();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +54,9 @@ class LoginScreen extends StatelessWidget {
             gradient: LinearGradient(
                 begin: Alignment.topRight,
                 end: Alignment.bottomLeft,
-                colors: [Colors.purpleAccent, Colors.pinkAccent])),
+                colors: [Colors.purpleAccent, Colors.pinkAccent]
+            )
+        ),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -59,7 +71,8 @@ class LoginScreen extends StatelessWidget {
               ),
               BlocListener<LoginBloc, LoginState>(
                 listener: (context, state) {
-                  if (state is LoginLoadinState) {
+
+                  if (state is LoginLoadingState) {
                     navigateToSplashScreen(context);
                   }
                   else if (state is LoginSuccessState) {
@@ -137,7 +150,7 @@ class LoginScreen extends StatelessWidget {
 
   void navigateToLobbyScreen(BuildContext context, FirebaseUser user) {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-      return LobbyScreen(currentUser: user);
+      return LobbyScreenParent(currentUser: user);
     }));
   }
 

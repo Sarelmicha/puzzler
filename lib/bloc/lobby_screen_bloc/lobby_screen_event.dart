@@ -1,16 +1,21 @@
 import 'package:equatable/equatable.dart';
 
-abstract class HomePageState extends Equatable {}
+abstract class LobbyScreenEvent  extends Equatable {}
 
-class LogOutInitial extends HomePageState {
+class InviteButtonHasPressed extends LobbyScreenEvent {
   @override
   // TODO: implement props
   List<Object> get props => null;
 
 }
 
-class LogOutSuccess extends HomePageState {
+class EnterLobbyEvent extends LobbyScreenEvent {
+
   @override
   // TODO: implement props
   List<Object> get props => null;
+
 }
+
+
+

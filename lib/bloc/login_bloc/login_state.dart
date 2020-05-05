@@ -10,7 +10,7 @@ class LoginInitialState extends LoginState {
   List<Object> get props => null;
 }
 
-class LoginLoadinState extends LoginState {
+class LoginLoadingState extends LoginState {
   @override
   // TODO: implement props
   List<Object> get props => null;

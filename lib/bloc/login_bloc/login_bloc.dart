@@ -21,7 +21,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   Stream<LoginState> mapEventToState(LoginEvent event) async* {
     if (event is LoginButtonPressedEvent) {
       try {
-        yield LoginLoadinState();
+        yield LoginLoadingState();
         var user = await userRepository.signInUser(event.email, event.password);
         yield LoginSuccessState(user: user);
       } catch (e) {
