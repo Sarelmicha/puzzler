@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 const kLoginId = '/login';
 const kSignupId = '/signup';
-const kWaitingId = "/waiting";
+const kSplashId = "/splash";
 const kGameId = '/game';
 const kLobbyId = '/lobby';
 const kCreateGameId = '/creategame';

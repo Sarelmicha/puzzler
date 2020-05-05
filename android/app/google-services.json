@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1012998607204",
+    "firebase_url": "https://puzzler-1f2c2.firebaseio.com",
+    "project_id": "puzzler-1f2c2",
+    "storage_bucket": "puzzler-1f2c2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1012998607204:android:779c8904ece9f9b3516a71",
+        "android_client_info": {
+          "package_name": "com.sarelmicha.puzzlechat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1012998607204-9b5278agtnmkbr265tlgea7e6r9r7a19.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAkD8HOmPHpw4tMmZbFVr0R--BcFE3x7a0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1012998607204-9b5278agtnmkbr265tlgea7e6r9r7a19.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -6,15 +6,15 @@ import 'package:puzzlechat/ui/widgets/contact_tile.dart';
 
 class ContactList extends StatelessWidget {
 
-  final ContactBloc contactBloc;
+//  final ContactBloc contactBloc;
 
-  ContactList({this.contactBloc});
+//  ContactList({this.contactBloc});
 
   @override
   Widget build(BuildContext context) {
 
     return StreamBuilder<List<Contact>>(
-      stream: contactBloc.stream,
+      stream: null,
       builder: (context, snapshot) {
 
 

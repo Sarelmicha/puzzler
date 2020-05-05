@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:puzzlechat/ui/screens/lobby_screen.dart';
-import 'package:puzzlechat/ui/screens/waiting_screen.dart';
+import 'package:puzzlechat/ui/screens/splash_screen.dart';
 
 
 class RoundedButton extends StatelessWidget {

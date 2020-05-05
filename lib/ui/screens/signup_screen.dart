@@ -1,15 +1,36 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:puzzlechat/ui/widgets/icon_text_field.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:puzzlechat/bloc/reg_bloc/user_reg_bloc.dart';
+import 'package:puzzlechat/bloc/reg_bloc/user_reg_event.dart';
+import 'package:puzzlechat/bloc/reg_bloc/user_reg_state.dart';
+import 'package:puzzlechat/ui/screens/lobby_screen.dart';
+import 'package:puzzlechat/ui/screens/splash_screen.dart';
+import 'package:puzzlechat/ui/widgets/form_widget.dart';
 import 'package:puzzlechat/ui/widgets/rounded_button.dart';
-import 'package:puzzlechat/util/contstants.dart';
-import 'package:puzzlechat/util/operation.dart';
+
+class SignupPageParent extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => UserRegBloc(),
+      child: SignupScreen(),
+    );
+  }
+}
 
 class SignupScreen extends StatelessWidget {
-  static String id = kSignupId;
+
+   TextEditingController emailController = TextEditingController();
+   TextEditingController passwordController = TextEditingController();
+   UserRegBloc userRegBloc;
 
   @override
   Widget build(BuildContext context) {
+
+    userRegBloc = BlocProvider.of<UserRegBloc>(context);
+
     return Scaffold(
         body: Center(
       child: Container(
@@ -22,46 +43,61 @@ class SignupScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text(
-                'Sign Up',
-                style: TextStyle(
-                    fontSize: 50.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white),
+              Flexible(
+                child: Text(
+                  'Sign Up',
+                  style: TextStyle(
+                      fontSize: 50.0,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
               ),
               SizedBox(
                 height: 10.0,
               ),
-              Text(
-                "It's free and only takes a minute",
-                style: TextStyle(
-                    fontSize: 13.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white),
+              
+              Flexible(
+                child: Text(
+                  "It's free and only takes a minute",
+                  style: TextStyle(
+                      fontSize: 13.0,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+              ),
+              BlocListener<UserRegBloc, UserRegState>(
+                listener: (context, state) {
+
+                  if (state is UserLoadingState) {
+                    navigateToSplashScreen(context);
+                  } else if (state is UserRegSuccessful) {
+                    navigateToLobbyScreen(context, state.user);
+                  }
+                  else if (state is UserRegFailure) {
+                    navigateBackToSignUpScreen(context);
+                  }
+                },
+                child: BlocBuilder<UserRegBloc, UserRegState>(
+                  builder: (context, state) {
+
+                    if (state is UserRegFailure) {
+                      return Text(
+                        state.message,
+                        style: TextStyle(
+                          color: Colors.redAccent,
+                        ),
+                      );
+                    }
+                    return Container();
+                  },
+                ),
               ),
               SizedBox(
                 height: 10.0,
               ),
-              IconTextField(
-                hint: "Enter your name",
-                obscureText: false,
-                textInputType: TextInputType.text,
-                iconData: Icons.person,
-                padding: EdgeInsets.all(10),
-              ),
-              IconTextField(
-                hint: "Enter your email",
-                obscureText: false,
-                textInputType: TextInputType.text,
-                iconData: Icons.email,
-                padding: EdgeInsets.all(10),
-              ),
-              IconTextField(
-                hint: "Enter your password",
-                obscureText: true,
-                textInputType: TextInputType.visiblePassword,
-                iconData: Icons.lock,
-                padding: EdgeInsets.all(10),
+              FormWidget(
+                emailController: emailController,
+                passwordController: passwordController,
               ),
               SizedBox(
                 height: 10.0,
@@ -70,9 +106,10 @@ class SignupScreen extends StatelessWidget {
                 text: 'Sign Up',
                 width: 200,
                 height: 42,
-                onPressed: () {
-                  Navigator.pushNamed(context, kWaitingId,
-                      arguments: {'operation': Operation.SIGNUP});
+                onPressed: () async {
+                  userRegBloc.add(SignUpButtonPressedEvent(
+                      email: emailController.text,
+                      password: passwordController.text));
                 },
               ),
             ],
@@ -81,4 +118,20 @@ class SignupScreen extends StatelessWidget {
       ),
     ));
   }
+
+  void navigateToLobbyScreen(BuildContext context, FirebaseUser user) {
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+      return LobbyScreen(currentUser: user);
+    }));
+  }
+
+   void navigateBackToSignUpScreen(BuildContext context) {
+     Navigator.pop(context);
+   }
+
+   void navigateToSplashScreen(BuildContext context) {
+     Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+       return SplashScreen();
+     }));
+   }
 }

@@ -6,7 +6,6 @@ import 'package:puzzlechat/ui/widgets/rounded_button.dart';
 import 'package:puzzlechat/util/contstants.dart';
 
 class CreateGameScreen extends StatefulWidget {
-  static String id = kCreateGameId;
 
   @override
   _CreateGameScreenState createState() => _CreateGameScreenState();
@@ -59,7 +58,7 @@ class _CreateGameScreenState extends State<CreateGameScreen> {
                 width: 200,
                 height: 200,
                 onPressed: () {
-                  Navigator.pushNamed(context, GameScreen.id);
+//                  Navigator.pushNamed(context, GameScreen.id);
                 }),
           ],
         ),

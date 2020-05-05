@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:puzzlechat/bloc/contact_bloc.dart';
@@ -7,7 +8,9 @@ import 'package:puzzlechat/util/contstants.dart';
 
 class LobbyScreen extends StatefulWidget {
 
-  static String id = kLobbyId;
+  FirebaseUser currentUser;
+
+  LobbyScreen({@required this.currentUser});
 
   @override
   _LobbyScreenState createState() => _LobbyScreenState();
@@ -15,8 +18,8 @@ class LobbyScreen extends StatefulWidget {
 
 class _LobbyScreenState extends State<LobbyScreen> {
 
-  GameData screenArguments;
-  ContactBloc contactBloc;
+//  GameData screenArguments;
+//  ContactBloc contactBloc;
 
   @override
   Widget build(BuildContext context) {
