@@ -8,7 +8,6 @@ import 'package:puzzlechat/ui/screens/splash_screen.dart';
 
 class NavigatorHelper {
 
-
   static void navigateToCreateGameScreen(BuildContext context) {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) {
       return CreateGameScreen();

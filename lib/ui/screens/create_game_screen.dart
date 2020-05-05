@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:puzzlechat/util/contstants.dart';
+import 'package:animated_widgets/animated_widgets.dart';
 
 class CreateGameScreen extends StatefulWidget {
   @override
@@ -9,10 +10,6 @@ class CreateGameScreen extends StatefulWidget {
 }
 
 class _CreateGameScreenState extends State<CreateGameScreen> {
-  int numOfRows = 3;
-  int totalTime;
-  String imageUrl;
-  List<Image> pieces = [];
 
   @override
   Widget build(BuildContext context) {
@@ -64,38 +61,43 @@ class _CreateGameScreenState extends State<CreateGameScreen> {
               end: Alignment.bottomLeft,
               colors: [Colors.purpleAccent, Colors.pinkAccent]),
         ),
+
+
+
         child: Center(
           child: DottedBorder(
             padding: EdgeInsets.all(20),
             color: Colors.white,
-            strokeWidth: 3,
+            strokeWidth: 1,
             child: Padding(
               padding: EdgeInsets.all(50.0),
               child: Column(
                   mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     Text(
                       'Smile!',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 40.0,
-                          fontWeight: FontWeight.bold),
+                      style: kLogoTextStyle.copyWith(
+                        fontSize: 40.0,
+                      )
                     ),
                     SizedBox(
                       height: 20.0,
                     ),
-                    IconButton(
-                      padding: EdgeInsets.zero,
-                      icon: Icon(
-                        Icons.camera_alt,
-                        color: Colors.white,
-                        size: 80,
+                    ShakeAnimatedWidget(
+                      duration: Duration(milliseconds: 1500),
+                      shakeAngle: Rotation.deg(z: 10),
+                      curve: Curves.linear,
+                      child: GestureDetector(
+                        onTap: (){
+
+                        },
+                        child: Icon(
+                          Icons.camera_alt,
+                          color: Colors.white,
+                          size: 80.0,
+                        ),
                       ),
-                      onPressed: () {
-                        // do something
-                      },
                     ),
                   ]),
             ),
