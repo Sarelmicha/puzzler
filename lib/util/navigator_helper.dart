@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:puzzlechat/ui/screens/create_game_screen.dart';
+import 'package:puzzlechat/ui/screens/pick_image_screen.dart';
 import 'package:puzzlechat/ui/screens/lobby_screen.dart';
 import 'package:puzzlechat/ui/screens/login_screen.dart';
 import 'package:puzzlechat/ui/screens/signup_screen.dart';
@@ -10,7 +10,7 @@ class NavigatorHelper {
 
   static void navigateToCreateGameScreen(BuildContext context) {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-      return CreateGameScreen();
+      return PickImageScreenParent();
     }));
   }
   

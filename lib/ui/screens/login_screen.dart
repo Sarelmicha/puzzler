@@ -100,8 +100,8 @@ class _LoginScreenState extends State<LoginScreen> {
               height: 42,
               onPressed: () {
                 loginBloc.add(LoginButtonPressedEvent(
-                  email: emailController.text,
-                  password: passwordController.text,
+                  email: emailController.text.trim(),
+                  password: passwordController.text.trim(),
                 ));
               },
             ),

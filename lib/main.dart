@@ -12,6 +12,9 @@ void main() => runApp(PuzzleChat());
 class PuzzleChat extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+
+    print('app started.');
+
     return MaterialApp(
       home: BlocProvider<AuthBloc>(
         create: (context) => AuthBloc()..add(AppStartedEvent()),

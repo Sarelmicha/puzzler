@@ -2,9 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:puzzlechat/bloc/auth_bloc/auth_bloc.dart';
-import 'package:puzzlechat/bloc/auth_bloc/auth_event.dart';
-import 'package:puzzlechat/bloc/auth_bloc/auth_state.dart';
+import 'package:puzzlechat/bloc/app_bar_bloc/app_bar_bloc.dart';
+import 'package:puzzlechat/bloc/app_bar_bloc/app_bar_event.dart';
+import 'package:puzzlechat/bloc/app_bar_bloc/app_bar_state.dart';
 import 'package:puzzlechat/bloc/lobby_screen_bloc/lobby_screen_bloc.dart';
 import 'package:puzzlechat/bloc/lobby_screen_bloc/lobby_screen_event.dart';
 import 'package:puzzlechat/bloc/lobby_screen_bloc/lobby_screen_state.dart';
@@ -20,9 +20,12 @@ class LobbyScreenParent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<LobbyScreenBloc>(
-        create: (context) => LobbyScreenBloc()..add(EnterLobbyEvent()),
-        child: LobbyScreen());
+    return BlocProvider<AppBarBloc>(
+      create: (context) => AppBarBloc(),
+      child: BlocProvider<LobbyScreenBloc>(
+          create: (context) => LobbyScreenBloc()..add(EnterLobbyEvent()),
+          child: LobbyScreen()),
+    );
   }
 }
 
@@ -32,13 +35,16 @@ class LobbyScreen extends StatefulWidget {
 }
 
 class _LobbyScreenState extends State<LobbyScreen> {
+
   LobbyScreenBloc lobbyScreenBloc;
-  AuthBloc authBloc;
+  AppBarBloc appBarBloc;
+
 
   @override
   Widget build(BuildContext context) {
+
     lobbyScreenBloc = BlocProvider.of<LobbyScreenBloc>(context);
-    authBloc = BlocProvider.of<AuthBloc>(context);
+    appBarBloc = BlocProvider.of<AppBarBloc>(context);
 
     return Scaffold(
         appBar: AppBar(
@@ -74,7 +80,7 @@ class _LobbyScreenState extends State<LobbyScreen> {
                 color: Colors.white,
               ),
               onPressed: () {
-                authBloc.add(LogoutButtonHasBeenPressed());
+                appBarBloc.add(LogoutButtonHasBeenPressed());
               },
             )
           ],
@@ -86,15 +92,18 @@ class _LobbyScreenState extends State<LobbyScreen> {
                     begin: Alignment.topRight,
                     end: Alignment.bottomLeft,
                     colors: [Colors.purpleAccent, Colors.pinkAccent])),
-            child: BlocListener<AuthBloc,AuthState>(
-              listener: (context,authState){
-                if(authState is UnAuthenticatedState){
+            child: BlocListener<AppBarBloc,AppBarState>(
+              listener: (context, appBarState) {
+                if(appBarState is LogOutSuccess){
                   NavigatorHelper.navigateToLoginScreen(context);
+                } else if(appBarState is ShowSettingsSuccess){
+                  //TODO - Navigate to Settings page.
+                } else if(appBarState is ShowNotificationSuccess){
+                  //TODO - Navigate to Notification page.
                 }
               },
               child: BlocListener<LobbyScreenBloc, LobbyScreenState>(
                 listener: (context, lobbyScreenState) {
-                  print('state isss $lobbyScreenState');
                   if (lobbyScreenState is LobbyScreenLoading) {
                     NavigatorHelper.navigateToSplashScreen(context);
                   } else if (lobbyScreenState is LobbyScreenReady) {
@@ -113,6 +122,6 @@ class _LobbyScreenState extends State<LobbyScreen> {
   void dispose() {
     super.dispose();
     lobbyScreenBloc.close();
-    authBloc.close();
+    appBarBloc.close();
   }
 }

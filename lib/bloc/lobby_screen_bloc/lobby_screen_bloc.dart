@@ -41,12 +41,12 @@ class LobbyScreenBloc extends Bloc<LobbyScreenEvent, LobbyScreenState> {
   Future<List<Contact>> getContacts() async {
     List<Contact> contacts = [];
 
-    int sizeOfContacts = 1000; // dummy value for now.
+    int sizeOfContacts = 100; // dummy value for now.
     //TODO - access to Database for fetching contact data.
 
     for (int i = 0; i < sizeOfContacts; i++) {
       contacts.add(
-          Contact(name: 'Yaniv Yona', avatarUrl: 'images/profile_img.png'));
+          Contact(name: 'User ${ i +  1}', avatarUrl: 'images/profile_img.png'));
     }
 
     return contacts;

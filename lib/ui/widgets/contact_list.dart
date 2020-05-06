@@ -10,9 +10,7 @@ class ContactList extends StatelessWidget {
 
     return BlocBuilder<LobbyScreenBloc, LobbyScreenState>(
       builder: (context, state) {
-        print('here from contact list');
         if (state is LobbyScreenReady) {
-          print('here in if inside contact list');
           return ListView.builder(
             itemBuilder: (context, index) {
               return ContactTile(
