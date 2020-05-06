@@ -87,6 +87,8 @@ class _LobbyScreenState extends State<LobbyScreen> {
         ),
         body: Center(
           child: Container(
+            height: double.infinity,
+            width: double.infinity,
             decoration: BoxDecoration(
                 gradient: LinearGradient(
                     begin: Alignment.topRight,

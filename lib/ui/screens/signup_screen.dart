@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -46,6 +45,8 @@ class _SignupScreenState extends State<SignupScreen> {
     return Scaffold(
         body: Center(
       child: Container(
+        width: double.infinity,
+        height: double.infinity,
         decoration: BoxDecoration(
             gradient: LinearGradient(
                 begin: Alignment.topRight,
