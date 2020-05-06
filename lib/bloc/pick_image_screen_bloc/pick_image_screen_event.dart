@@ -7,7 +7,7 @@ class PickImageScreenScreenInitial extends PickImageScreenEvent {
   List<Object> get props => null;
 }
 
-class PickImageScreenReady extends PickImageScreenEvent {
+class EnterPickImageScreenEvent extends PickImageScreenEvent {
   @override
   List<Object> get props => null;
 }

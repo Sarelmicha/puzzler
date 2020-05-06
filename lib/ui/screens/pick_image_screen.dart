@@ -13,7 +13,7 @@ class PickImageScreenParent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
      return BlocProvider<PickImageScreenBloc>(
-      create: (context) => PickImageScreenBloc()..add(PickImageScreenReady()),
+      create: (context) => PickImageScreenBloc()..add(EnterPickImageScreenEvent()),
       child: PickImageScreen(),
     );
   }
@@ -26,8 +26,7 @@ class PickImageScreen extends StatefulWidget {
 
 class _PickImageScreenState extends State<PickImageScreen> {
 
-  bool _enabled = true;
-  bool isAnimationTriggered  = false;
+  bool _enabled = false;
   PickImageScreenBloc pickImageScreenBloc;
 
   @override
@@ -102,7 +101,9 @@ class _PickImageScreenState extends State<PickImageScreen> {
                 child: BlocBuilder<PickImageScreenBloc, PickImageScreenState>(
                   builder: (context, state) {
 
-                    _enabled = !_enabled;
+                    if(state is AnimationSuccess) {
+                      _enabled = !_enabled;
+                    }
 
                     return Column(
                       children: <Widget>[

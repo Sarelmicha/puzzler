@@ -13,11 +13,12 @@ class PickImageScreenBloc
   @override
   Stream<PickImageScreenState> mapEventToState(
       PickImageScreenEvent event) async* {
-    if (event is PickImageScreenReady) {
-      yield PickImageScreenAnimationSuccess();
+    if (event is EnterPickImageScreenEvent) {
+      yield AnimationSuccess();
     } else if (event is CameraPressedEvent){
       File imageFile = await _openCamera();
       yield CameraSuccessState(imageFile: imageFile);
+
     } else if (event is GalleryPressedEvent) {
       File imageFile = await _openGallery();
       yield GallerySuccessState(imageFile: imageFile);

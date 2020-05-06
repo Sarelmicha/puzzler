@@ -10,7 +10,7 @@ class PickImageScreenInitialState extends PickImageScreenState {
   List<Object> get props => null;
 }
 
-class PickImageScreenAnimationSuccess extends PickImageScreenState {
+class AnimationSuccess extends PickImageScreenState {
 
   @override
   List<Object> get props => null;
@@ -18,7 +18,7 @@ class PickImageScreenAnimationSuccess extends PickImageScreenState {
 
 class CameraSuccessState extends PickImageScreenState {
 
-  File imageFile;
+  final File imageFile;
 
   CameraSuccessState({this.imageFile});
 
@@ -29,7 +29,7 @@ class CameraSuccessState extends PickImageScreenState {
 
 class GallerySuccessState extends PickImageScreenState {
 
-  File imageFile;
+  final File imageFile;
 
   GallerySuccessState({this.imageFile});
 
