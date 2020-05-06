@@ -21,6 +21,7 @@ dependencies:
   flutter_bloc: ^3.0.0
   dotted_border: ^1.0.5
   animated_widgets: ^1.0.4
+  image_picker:
 
 
 dev_dependencies:

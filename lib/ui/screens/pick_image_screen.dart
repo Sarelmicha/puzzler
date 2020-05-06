@@ -27,9 +27,14 @@ class PickImageScreen extends StatefulWidget {
 class _PickImageScreenState extends State<PickImageScreen> {
 
   bool _enabled = true;
+  bool isAnimationTriggered  = false;
+  PickImageScreenBloc pickImageScreenBloc;
 
   @override
   Widget build(BuildContext context) {
+
+    pickImageScreenBloc = BlocProvider.of<PickImageScreenBloc>(context);
+
     return Scaffold(
       appBar: AppBar(
         title:  Text(
@@ -98,7 +103,6 @@ class _PickImageScreenState extends State<PickImageScreen> {
                   builder: (context, state) {
 
                     _enabled = !_enabled;
-                    print(_enabled);
 
                     return Column(
                       children: <Widget>[
@@ -128,7 +132,7 @@ class _PickImageScreenState extends State<PickImageScreen> {
                                     curve: Curves.linear,
                                     child: GestureDetector(
                                       onTap: (){
-
+                                        pickImageScreenBloc.add(CameraPressedEvent());
                                       },
                                       child: Icon(
                                         Icons.camera_alt,
@@ -176,7 +180,7 @@ class _PickImageScreenState extends State<PickImageScreen> {
                                     curve: Curves.linear,
                                     child: GestureDetector(
                                       onTap: (){
-
+                                        pickImageScreenBloc.add(GalleryPressedEvent());
                                       },
                                       child: Icon(
                                         Icons.photo,
@@ -200,4 +204,12 @@ class _PickImageScreenState extends State<PickImageScreen> {
       ),
     );
   }
+
+  @override
+  void dispose() {
+    super.dispose();
+    pickImageScreenBloc.close();
+  }
+
+
 }
