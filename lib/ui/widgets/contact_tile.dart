@@ -28,7 +28,7 @@ class ContactTile extends StatelessWidget {
             width: 30,
             height: 20,
             onPressed: (){
-              NavigatorHelper.navigateToCreateGameScreen(context);
+              NavigatorHelper.navigateToPickImageScreen(context);
             },
           ),
     );

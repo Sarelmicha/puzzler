@@ -7,13 +7,14 @@ import 'package:puzzlechat/bloc/pick_image_screen_bloc/pick_image_screen_event.d
 import 'package:puzzlechat/bloc/pick_image_screen_bloc/pick_image_screen_state.dart';
 import 'package:puzzlechat/util/contstants.dart';
 import 'package:animated_widgets/animated_widgets.dart';
-
+import 'package:puzzlechat/util/navigator_helper.dart';
 
 class PickImageScreenParent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-     return BlocProvider<PickImageScreenBloc>(
-      create: (context) => PickImageScreenBloc()..add(EnterPickImageScreenEvent()),
+    return BlocProvider<PickImageScreenBloc>(
+      create: (context) =>
+          PickImageScreenBloc()..add(EnterPickImageScreenEvent()),
       child: PickImageScreen(),
     );
   }
@@ -25,23 +26,16 @@ class PickImageScreen extends StatefulWidget {
 }
 
 class _PickImageScreenState extends State<PickImageScreen> {
-
   bool _enabled = false;
   PickImageScreenBloc pickImageScreenBloc;
 
   @override
   Widget build(BuildContext context) {
-
     pickImageScreenBloc = BlocProvider.of<PickImageScreenBloc>(context);
 
     return Scaffold(
       appBar: AppBar(
-        title:  Text(
-          'Puzzler',
-          style: kLogoTextStyle.copyWith(
-            fontSize: 30.0
-          )
-        ),
+        title: Text('Puzzler', style: kLogoTextStyle.copyWith(fontSize: 30.0)),
         backgroundColor: Colors.purpleAccent,
         actions: <Widget>[
           IconButton(
@@ -82,26 +76,24 @@ class _PickImageScreenState extends State<PickImageScreen> {
               end: Alignment.bottomLeft,
               colors: [Colors.purpleAccent, Colors.pinkAccent]),
         ),
-
-
         child: Padding(
           padding: EdgeInsets.symmetric(vertical: 20.0),
           child: Column(
             children: <Widget>[
               BlocListener<PickImageScreenBloc, PickImageScreenState>(
                 listener: (context, state) {
-
                   if (state is CameraSuccessState) {
-                    //TODO - Navigate to game details
-                  }
-                  else if (state is GallerySuccessState) {
-                    //TODO - Navigate to game details
+                    print('image file is ${state.imageFile}');
+                    NavigatorHelper.navigateToEditImageScreen(
+                        context, state.imageFile);
+                  } else if (state is GallerySuccessState) {
+                    NavigatorHelper.navigateToEditImageScreen(
+                        context, state.imageFile);
                   }
                 },
                 child: BlocBuilder<PickImageScreenBloc, PickImageScreenState>(
                   builder: (context, state) {
-
-                    if(state is AnimationSuccess) {
+                    if (state is AnimationSuccess) {
                       _enabled = !_enabled;
                     }
 
@@ -112,17 +104,16 @@ class _PickImageScreenState extends State<PickImageScreen> {
                           color: Colors.white,
                           strokeWidth: 1,
                           child: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 30.0),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 40.0, vertical: 30.0),
                             child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: <Widget>[
-                                  Text(
-                                      'Smile!',
+                                  Text('Smile!',
                                       style: kLogoTextStyle.copyWith(
                                         fontSize: 40.0,
-                                      )
-                                  ),
+                                      )),
                                   SizedBox(
                                     height: 20.0,
                                   ),
@@ -132,8 +123,9 @@ class _PickImageScreenState extends State<PickImageScreen> {
                                     shakeAngle: Rotation.deg(z: -10),
                                     curve: Curves.linear,
                                     child: GestureDetector(
-                                      onTap: (){
-                                        pickImageScreenBloc.add(CameraPressedEvent());
+                                      onTap: () {
+                                        pickImageScreenBloc
+                                            .add(CameraPressedEvent());
                                       },
                                       child: Icon(
                                         Icons.camera_alt,
@@ -145,14 +137,11 @@ class _PickImageScreenState extends State<PickImageScreen> {
                                 ]),
                           ),
                         ),
-
                         Padding(
                           padding: EdgeInsets.symmetric(vertical: 10.0),
                           child: Text(
                             'OR',
-                            style: kLogoTextStyle.copyWith(
-                                fontSize: 20.0
-                            ),
+                            style: kLogoTextStyle.copyWith(fontSize: 20.0),
                           ),
                         ),
                         DottedBorder(
@@ -160,17 +149,16 @@ class _PickImageScreenState extends State<PickImageScreen> {
                           color: Colors.white,
                           strokeWidth: 1,
                           child: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 30.0),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 40.0, vertical: 30.0),
                             child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: <Widget>[
-                                  Text(
-                                      'Gallery',
+                                  Text('Gallery',
                                       style: kLogoTextStyle.copyWith(
                                         fontSize: 40.0,
-                                      )
-                                  ),
+                                      )),
                                   SizedBox(
                                     height: 20.0,
                                   ),
@@ -180,8 +168,9 @@ class _PickImageScreenState extends State<PickImageScreen> {
                                     shakeAngle: Rotation.deg(z: 10),
                                     curve: Curves.linear,
                                     child: GestureDetector(
-                                      onTap: (){
-                                        pickImageScreenBloc.add(GalleryPressedEvent());
+                                      onTap: () {
+                                        pickImageScreenBloc
+                                            .add(GalleryPressedEvent());
                                       },
                                       child: Icon(
                                         Icons.photo,
@@ -198,7 +187,6 @@ class _PickImageScreenState extends State<PickImageScreen> {
                   },
                 ),
               ),
-
             ],
           ),
         ),
@@ -211,6 +199,4 @@ class _PickImageScreenState extends State<PickImageScreen> {
     super.dispose();
     pickImageScreenBloc.close();
   }
-
-
 }
