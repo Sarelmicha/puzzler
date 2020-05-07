@@ -47,7 +47,7 @@ class NavigatorHelper {
     }));
   }
 
-  static void navigateBackToCurrentScreen(BuildContext context) {
+  static void navigateBackToPreviousScreen(BuildContext context) {
     Navigator.pop(context);
   }
 

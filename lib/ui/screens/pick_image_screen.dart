@@ -82,8 +82,10 @@ class _PickImageScreenState extends State<PickImageScreen> {
             children: <Widget>[
               BlocListener<PickImageScreenBloc, PickImageScreenState>(
                 listener: (context, state) {
+
+                  print('state from screen is $state');
+
                   if (state is CameraSuccessState) {
-                    print('image file is ${state.imageFile}');
                     NavigatorHelper.navigateToEditImageScreen(
                         context, state.imageFile);
                   } else if (state is GallerySuccessState) {
@@ -94,7 +96,7 @@ class _PickImageScreenState extends State<PickImageScreen> {
                 child: BlocBuilder<PickImageScreenBloc, PickImageScreenState>(
                   builder: (context, state) {
                     if (state is AnimationSuccess) {
-                      _enabled = !_enabled;
+                      _enabled = true;
                     }
 
                     return Column(
