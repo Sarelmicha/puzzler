@@ -191,7 +191,7 @@ class _EditImageScreenState extends State<EditImageScreen> {
                           return ParametersMenuWidget();
                         } else if (state is AddFiltersSuccessState) {
                           return Container(
-                              margin: EdgeInsets.only(top: 30.0),
+                              margin: EdgeInsets.only(top: 30.0,left: 5.0),
                               height: 100.0,
                               width: double.infinity,
                               child: FiltersList(

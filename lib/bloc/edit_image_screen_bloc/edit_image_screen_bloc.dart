@@ -14,7 +14,7 @@ class EditImageScreenBloc
     0xaac4b8b5,
     0xffd699d4,
     0xffceb1ab,
-    0x77d08ac2,
+    0x77c4b8b5,
     0xfff4edec
   ];
 
@@ -29,7 +29,6 @@ class EditImageScreenBloc
     print('event is $event');
 
     if (event is FiltersButtonHasBeenPressed) {
-      //TODO - can add spinner while waiting to async function
       List<Filter> filters = createFilterList();
       yield AddFiltersSuccessState(filters: filters);
     } else if (event is ParametersButtonHasBeenPressed) {
