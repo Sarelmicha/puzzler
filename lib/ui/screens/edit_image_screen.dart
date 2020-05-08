@@ -8,6 +8,7 @@ import 'package:puzzlechat/bloc/edit_image_screen_bloc/edit_image_screen_event.d
 import 'package:puzzlechat/bloc/edit_image_screen_bloc/edit_image_screen_state.dart';
 import 'package:puzzlechat/bloc/pick_image_screen_bloc/pick_image_screen_bloc.dart';
 import 'package:puzzlechat/bloc/pick_image_screen_bloc/pick_image_screen_event.dart';
+import 'package:puzzlechat/ui/widgets/edit_image_widget.dart';
 import 'package:puzzlechat/ui/widgets/parameters_menu_widget.dart';
 import 'package:puzzlechat/util/contstants.dart';
 import 'package:puzzlechat/util/navigator_helper.dart';
@@ -27,17 +28,17 @@ class EditImageScreenParent extends StatelessWidget {
       )..add(ParametersButtonHasBeenPressed()),
       child: BlocProvider<AppBarBloc>(
         create: (context) => AppBarBloc(),
-        child: EditImageScreen(fileImage: imageFile),
+        child: EditImageScreen(imageFile: imageFile),
       ),
     );
   }
 }
 
 class EditImageScreen extends StatefulWidget {
-  final File fileImage;
+  final File imageFile;
   final PickImageScreenBloc pickImageScreenBloc;
 
-  EditImageScreen({this.fileImage, this.pickImageScreenBloc});
+  EditImageScreen({this.imageFile, this.pickImageScreenBloc});
 
   @override
   _EditImageScreenState createState() => _EditImageScreenState();
@@ -46,6 +47,7 @@ class EditImageScreen extends StatefulWidget {
 class _EditImageScreenState extends State<EditImageScreen> {
   AppBarBloc appBarBloc;
   EditImageScreenBloc editImageScreenBloc;
+  int currentColor = 0xffffffff; //White color
 
   @override
   Widget build(BuildContext context) {
@@ -108,25 +110,30 @@ class _EditImageScreenState extends State<EditImageScreen> {
                       colors: [Colors.purpleAccent, Colors.pinkAccent])),
               child: Column(
                 children: <Widget>[
-                  Container(
-                    width: double.infinity,
-                    height: 350,
-                    padding: EdgeInsets.all(20.0),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(20.0),
-                      child: Image.file(
-                        widget.fileImage,
-                        width: double.infinity,
-                        height: 150,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
+                  BlocBuilder<EditImageScreenBloc, EditImageScreenState>(
+                    builder: (context, state) {
+                      print('first state is $state');
+                      if (state is AddParametersSuccessState) {
+                        return EditImageWidget(
+                            color: currentColor, imageFile: widget.imageFile);
+                      } else if (state is ImageFilterSuccessState) {
+                        currentColor = state.currentColor;
+                        print('current color is $currentColor');
+                        return EditImageWidget(
+                            color: state.currentColor,
+                            imageFile: widget.imageFile);
+                      } else if (state is AddFiltersSuccessState) {
+                        return EditImageWidget(
+                            color: currentColor, imageFile: widget.imageFile);
+                      }
+                      return Container();
+                    },
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
                       GestureDetector(
-                        onTap: (){
+                        onTap: () {
                           editImageScreenBloc
                               .add(ParametersButtonHasBeenPressed());
                         },
@@ -177,7 +184,6 @@ class _EditImageScreenState extends State<EditImageScreen> {
                         BlocBuilder<EditImageScreenBloc, EditImageScreenState>(
                       builder: (context, state) {
                         print('state is $state');
-
                         if (state is EditImageScreenInitialState) {
                           //When enter the screen the default is parametersMenu
                           return ParametersMenuWidget();
@@ -188,7 +194,18 @@ class _EditImageScreenState extends State<EditImageScreen> {
                               margin: EdgeInsets.only(top: 30.0),
                               height: 100.0,
                               width: double.infinity,
-                              child: FiltersList(filters: state.filters));
+                              child: FiltersList(
+                                  filters: state.filters,
+                                  bloc: editImageScreenBloc));
+                        } else if (state is ImageFilterSuccessState) {
+                          editImageScreenBloc.add(FiltersButtonHasBeenPressed());
+                          return Container(
+                              margin: EdgeInsets.only(top: 30.0),
+                              height: 100.0,
+                              width: double.infinity,
+                              child: FiltersList(
+                                  filters: state.filters,
+                                  bloc: editImageScreenBloc));
                         }
                         return Container();
                       },

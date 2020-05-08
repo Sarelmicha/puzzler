@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:puzzlechat/data/filter.dart';
 
 abstract class EditImageScreenState extends Equatable {}
@@ -16,14 +17,13 @@ class RotationSuccessState extends EditImageScreenState {
 
 class AddStickerSuccessState extends EditImageScreenState {
   @override
-  List<Object> get props => throw UnimplementedError();
+  List<Object> get props => null;
 }
-
 
 
 class AddParametersSuccessState extends EditImageScreenState {
   @override
-  List<Object> get props => throw UnimplementedError();
+  List<Object> get props => null;
 }
 
 class AddFiltersSuccessState extends EditImageScreenState {
@@ -46,6 +46,19 @@ class SendImageSuccessState extends EditImageScreenState {
 class SendImageFailureState extends EditImageScreenState {
 
   @override
+  List<Object> get props => null;
+
+}
+
+class ImageFilterSuccessState extends EditImageScreenState {
+
+  final List<Filter> filters;
+  final int currentColor;
+
+  ImageFilterSuccessState({@required this.currentColor,@required this.filters});
+
+  @override
+  // TODO: implement props
   List<Object> get props => null;
 
 }

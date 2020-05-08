@@ -13,8 +13,6 @@ class PuzzleChat extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    //Test Commit
-
     print('app started.');
 
     return MaterialApp(
