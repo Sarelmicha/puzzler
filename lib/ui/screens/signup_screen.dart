@@ -87,7 +87,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     NavigatorHelper.navigateToLobbyScreen(context, state.user);
                   }
                   else if (state is UserRegFailure) {
-                    NavigatorHelper.navigateBackToCurrentScreen(context);
+                    NavigatorHelper.navigateBackToPreviousScreen(context);
                   }
                 },
                 child: BlocBuilder<UserRegBloc, UserRegState>(

@@ -66,7 +66,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   NavigatorHelper.navigateToLobbyScreen(context, state.user);
                 }
                 else if (state is LoginFailureState) {
-                  NavigatorHelper.navigateBackToCurrentScreen(context);
+                  NavigatorHelper.navigateBackToPreviousScreen(context);
                 }
               },
               child: BlocBuilder<LoginBloc, LoginState>(

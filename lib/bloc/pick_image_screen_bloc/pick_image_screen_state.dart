@@ -16,6 +16,20 @@ class AnimationSuccess extends PickImageScreenState {
   List<Object> get props => null;
 }
 
+class BackFromCameraSuccess extends PickImageScreenState {
+  @override
+  // TODO: implement props
+  List<Object> get props => throw UnimplementedError();
+
+}
+
+class BackFromGallerySuccess extends PickImageScreenState {
+  @override
+  // TODO: implement props
+  List<Object> get props => throw UnimplementedError();
+
+}
+
 class CameraSuccessState extends PickImageScreenState {
 
   final File imageFile;

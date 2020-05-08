@@ -109,7 +109,7 @@ class _LobbyScreenState extends State<LobbyScreen> {
                   if (lobbyScreenState is LobbyScreenLoading) {
                     NavigatorHelper.navigateToSplashScreen(context);
                   } else if (lobbyScreenState is LobbyScreenReady) {
-                    NavigatorHelper.navigateBackToCurrentScreen(context);
+                    NavigatorHelper.navigateBackToPreviousScreen(context);
                   }
                 },
                 child: Center(child: ContactList()),
