@@ -15,12 +15,15 @@ class FilterWidget extends StatelessWidget {
         Padding(
           padding: EdgeInsets.all(5.0),
           child: CircleAvatar(
-            radius: 50.0,
+            radius: 30.0,
             backgroundImage: FileImage(filter.imageFile),
           ),
         ),
         Text(
-          filter.filterName
+          filter.filterName,
+          style: TextStyle(
+            fontWeight: FontWeight.bold
+          ),
         ),
       ],
     );

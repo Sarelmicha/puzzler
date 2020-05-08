@@ -10,12 +10,10 @@ dependencies:
   flutter:
     sdk: flutter
 
-
   cupertino_icons: ^0.1.2
   image: ^2.1.11
   circular_countdown: ^0.1.0
   image_gallery_saver: ^1.2.2
-  argon_buttons_flutter: ^1.0.2
   firebase_auth: ^0.16.0
   equatable: ^1.1.1
   flutter_bloc: ^3.0.0

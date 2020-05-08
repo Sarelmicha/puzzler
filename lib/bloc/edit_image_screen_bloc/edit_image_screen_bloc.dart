@@ -1,6 +1,4 @@
 import 'dart:io';
-
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:puzzlechat/bloc/edit_image_screen_bloc/edit_image_screen_event.dart';
 import 'package:puzzlechat/bloc/edit_image_screen_bloc/edit_image_screen_state.dart';
@@ -32,10 +30,10 @@ class EditImageScreenBloc
 
   List<Filter> createFilterList() {
 
-    int numOfFilters = 6;
+    int numOfFilters = 8;
     List<Filter> filters = [];
-    List<String> filterNames = ['No Filter', 'Classic','Retro','Sphinex','Ruby','Clipperd'];
-    List<bool> isPickedList = [true, false, false, false, false, false];
+    List<String> filterNames = ['No Filter', 'Classic','Retro','Sphinex','Ruby','Clipperd','Saphir',"Clean"];
+    List<bool> isPickedList = [true, false, false, false, false, false, false, false];
 
     for(int i = 0; i < numOfFilters; i++){
       filters.add(Filter(

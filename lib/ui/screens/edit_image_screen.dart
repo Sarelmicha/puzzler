@@ -125,9 +125,15 @@ class _EditImageScreenState extends State<EditImageScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
-                      Icon(
-                        Icons.mode_edit,
-                        color: Colors.white,
+                      GestureDetector(
+                        onTap: (){
+                          editImageScreenBloc
+                              .add(ParametersButtonHasBeenPressed());
+                        },
+                        child: Icon(
+                          Icons.mode_edit,
+                          color: Colors.white,
+                        ),
                       ),
                       SizedBox(
                         width: 10.0,
@@ -148,7 +154,6 @@ class _EditImageScreenState extends State<EditImageScreen> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          print('tapped baby');
                           editImageScreenBloc
                               .add(FiltersButtonHasBeenPressed());
                         },
@@ -179,12 +184,11 @@ class _EditImageScreenState extends State<EditImageScreen> {
                         } else if (state is AddParametersSuccessState) {
                           return ParametersMenuWidget();
                         } else if (state is AddFiltersSuccessState) {
-                          return Center(
-                            child: Container(
-                                height: 100.0,
-                                width: double.infinity,
-                                child: FiltersList(filters: state.filters)),
-                          );
+                          return Container(
+                              margin: EdgeInsets.only(top: 30.0),
+                              height: 100.0,
+                              width: double.infinity,
+                              child: FiltersList(filters: state.filters));
                         }
                         return Container();
                       },

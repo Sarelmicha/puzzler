@@ -1,8 +1,5 @@
 import 'package:equatable/equatable.dart';
 
-
-
-
 abstract class EditImageScreenEvent extends Equatable {}
 
 class EditImageScreenScreenInitial extends EditImageScreenEvent {

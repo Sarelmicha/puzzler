@@ -1,8 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:puzzlechat/data/filter.dart';
 
-
-
 abstract class EditImageScreenState extends Equatable {}
 
 class EditImageScreenInitialState extends EditImageScreenState {
