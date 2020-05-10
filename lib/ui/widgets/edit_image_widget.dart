@@ -12,8 +12,8 @@ class EditImageWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     print('color is $color');
     return Container(
-      width: double.infinity,
-      height: 350,
+      width: 350.0,
+      height: 350.0,
       padding: EdgeInsets.all(20.0),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20.0),

@@ -38,7 +38,7 @@ class FilterWidget extends StatelessWidget {
           Text(
             filter.filterName,
             style: TextStyle(
-              fontWeight: FontWeight.bold
+              color: Colors.white,
             ),
           ),
         ],

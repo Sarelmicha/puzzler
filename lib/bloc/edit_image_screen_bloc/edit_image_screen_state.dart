@@ -1,6 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:puzzlechat/data/filter.dart';
+
+import '../../data/filter.dart';
+
 
 abstract class EditImageScreenState extends Equatable {}
 
@@ -9,32 +11,26 @@ class EditImageScreenInitialState extends EditImageScreenState {
   List<Object> get props => null;
 }
 
-class RotationSuccessState extends EditImageScreenState {
-  @override
-  List<Object> get props => throw UnimplementedError();
-
-}
-
-class AddStickerSuccessState extends EditImageScreenState {
+class StickerBottomScreenSuccessState extends EditImageScreenState {
   @override
   List<Object> get props => null;
 }
 
-
-class AddParametersSuccessState extends EditImageScreenState {
-  @override
-  List<Object> get props => null;
-}
-
-class AddFiltersSuccessState extends EditImageScreenState {
+class FiltersBottomScreenSuccessState extends EditImageScreenState {
 
   final List<Filter> filters;
-  AddFiltersSuccessState({this.filters});
+  FiltersBottomScreenSuccessState({this.filters});
 
   @override
   List<Object> get props => null;
 
 }
+
+class ParametersBottomScreenSuccessState extends EditImageScreenState {
+  @override
+  List<Object> get props => null;
+}
+
 
 class SendImageSuccessState extends EditImageScreenState {
 
@@ -43,6 +39,7 @@ class SendImageSuccessState extends EditImageScreenState {
 
 }
 
+
 class SendImageFailureState extends EditImageScreenState {
 
   @override
@@ -50,17 +47,7 @@ class SendImageFailureState extends EditImageScreenState {
 
 }
 
-class ImageFilterSuccessState extends EditImageScreenState {
 
-  final List<Filter> filters;
-  final int currentColor;
-
-  ImageFilterSuccessState({@required this.currentColor,@required this.filters});
-
-  @override
-  List<Object> get props => null;
-
-}
 
 class ChangeTimerSuccessState extends EditImageScreenState {
 
@@ -81,6 +68,14 @@ class ChangePiecesSuccessState extends EditImageScreenState {
 
   @override
   List<Object> get props => null;
+
+}
+
+class ChangeParametersSuccessState extends EditImageScreenState {
+  @override
+  // TODO: implement props
+  List<Object> get props => null;
+
 
 }
 

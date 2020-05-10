@@ -5,7 +5,12 @@ import 'package:puzzlechat/bloc/app_bar_bloc/app_bar_bloc.dart';
 import 'package:puzzlechat/bloc/app_bar_bloc/app_bar_event.dart';
 import 'package:puzzlechat/bloc/edit_image_screen_bloc/edit_image_screen_bloc.dart';
 import 'package:puzzlechat/bloc/edit_image_screen_bloc/edit_image_screen_event.dart';
-import 'package:puzzlechat/bloc/edit_image_screen_bloc/edit_image_screen_state.dart';
+import 'package:puzzlechat/bloc/edit_image_screen_bloc/filter_bloc/filter_bloc.dart';
+import 'package:puzzlechat/bloc/edit_image_screen_bloc/filter_bloc/filter_event.dart';
+import 'package:puzzlechat/bloc/edit_image_screen_bloc/filter_bloc/filter_state.dart';
+import 'package:puzzlechat/bloc/edit_image_screen_bloc/rotation_bloc/rotation_bloc.dart';
+import 'package:puzzlechat/bloc/edit_image_screen_bloc/rotation_bloc/rotation_event.dart';
+import 'package:puzzlechat/bloc/edit_image_screen_bloc/rotation_bloc/rotation_state.dart';
 import 'package:puzzlechat/bloc/pick_image_screen_bloc/pick_image_screen_bloc.dart';
 import 'package:puzzlechat/bloc/pick_image_screen_bloc/pick_image_screen_event.dart';
 import 'package:puzzlechat/ui/widgets/edit_image_widget.dart';
@@ -13,6 +18,11 @@ import 'package:puzzlechat/ui/widgets/parameters_menu_widget.dart';
 import 'package:puzzlechat/util/contstants.dart';
 import 'package:puzzlechat/util/navigator_helper.dart';
 import 'package:puzzlechat/ui/widgets/filters_list.dart';
+
+import '../../bloc/edit_image_screen_bloc/edit_image_screen_state.dart';
+
+
+
 
 class EditImageScreenParent extends StatelessWidget {
   final File imageFile;
@@ -26,15 +36,22 @@ class EditImageScreenParent extends StatelessWidget {
       create: (context) => EditImageScreenBloc(
         imageFile: imageFile,
       )..add(ParametersButtonHasBeenPressed()),
-      child: BlocProvider<AppBarBloc>(
-        create: (context) => AppBarBloc(),
-        child: EditImageScreen(imageFile: imageFile),
+      child: BlocProvider(
+        create: (context) => FilterBloc(imageFile: imageFile),
+        child: BlocProvider(
+          create: (context) => RotationBloc(),
+          child: BlocProvider<AppBarBloc>(
+            create: (context) => AppBarBloc(),
+            child: EditImageScreen(imageFile: imageFile),
+          ),
+        ),
       ),
     );
   }
 }
 
 class EditImageScreen extends StatefulWidget {
+
   final File imageFile;
   final PickImageScreenBloc pickImageScreenBloc;
 
@@ -47,14 +64,21 @@ class EditImageScreen extends StatefulWidget {
 class _EditImageScreenState extends State<EditImageScreen> {
   AppBarBloc appBarBloc;
   EditImageScreenBloc editImageScreenBloc;
+  RotationBloc rotationBloc;
+  FilterBloc filterBloc;
+
   int currentColor = 0xffffffff; //White color
   int currentTotalTime = 30;
   int currentNumOfPieces = 9;
+  int currentImageRotation = 0;
 
   @override
   Widget build(BuildContext context) {
+
     appBarBloc = BlocProvider.of<AppBarBloc>(context);
     editImageScreenBloc = BlocProvider.of<EditImageScreenBloc>(context);
+    rotationBloc = BlocProvider.of<RotationBloc>(context);
+    filterBloc = BlocProvider.of<FilterBloc>(context);
 
     return WillPopScope(
       onWillPop: () {
@@ -112,15 +136,25 @@ class _EditImageScreenState extends State<EditImageScreen> {
                       colors: [Colors.purpleAccent, Colors.pinkAccent])),
               child: Column(
                 children: <Widget>[
-                  BlocBuilder<EditImageScreenBloc, EditImageScreenState>(
-                    builder: (context, state) {
-                      print('first state is $state');
-                      if (state is ImageFilterSuccessState) {
+                  BlocBuilder<RotationBloc,EditImageScreenState>(
+                    builder: (context,state) {
+                       if(state is RotationSuccessState){
+                      currentImageRotation = state.rotation;
+                      }
+                       return Container();
+                    },
+                  ),
+                  BlocBuilder<FilterBloc, EditImageScreenState>(
+                    builder: (context, state){
+                      if (state is SelectFilterSuccessState) {
                         //User change filter image.
                         currentColor = state.currentColor;
-                      }
-                      return EditImageWidget(
-                          color: currentColor, imageFile: widget.imageFile);
+                        filterBloc.add(FilterChangedEvent());
+                      } return RotatedBox(
+                        quarterTurns: currentImageRotation,
+                        child: EditImageWidget(
+                            color: currentColor, imageFile: widget.imageFile),
+                      );
                     },
                   ),
                   Row(
@@ -139,9 +173,14 @@ class _EditImageScreenState extends State<EditImageScreen> {
                       SizedBox(
                         width: 10.0,
                       ),
-                      Icon(
-                        Icons.rotate_right,
-                        color: Colors.white,
+                      GestureDetector(
+                        onTap: (){
+                          editImageScreenBloc.add(RotateButtonHasBeenPressed());
+                        },
+                        child: Icon(
+                          Icons.rotate_right,
+                          color: Colors.white,
+                        ),
                       ),
                       SizedBox(
                         width: 10.0,
@@ -173,9 +212,12 @@ class _EditImageScreenState extends State<EditImageScreen> {
                     child: Divider(color: Colors.white),
                   ),
                   BlocListener<EditImageScreenBloc, EditImageScreenState>(
-                    listener: (context, state) {},
+                    listener: (context, state) {
+                      //TODO- pass to next screen wehn Send button has been pressed
+                    },
                     child:
                         BlocBuilder<EditImageScreenBloc, EditImageScreenState>(
+
                       builder: (context, state) {
                         //This blocBuilder show which bottom screen to show according to user choice
                         print('state is $state');
@@ -186,44 +228,38 @@ class _EditImageScreenState extends State<EditImageScreen> {
                             numOfPieces: currentNumOfPieces,
                             bloc: editImageScreenBloc,
                           );
-                        } else if (state is AddParametersSuccessState) {
+                        } else if (state is ParametersBottomScreenSuccessState) {
                           return ParametersMenuWidget(
                               totalTime: currentTotalTime,
                               numOfPieces: currentNumOfPieces,
                               bloc: editImageScreenBloc);
-                        } else if (state is AddFiltersSuccessState) {
+                        } else if (state is FiltersBottomScreenSuccessState) {
                           return Container(
                               margin: EdgeInsets.only(top: 30.0, left: 5.0),
                               height: 100.0,
                               width: double.infinity,
                               child: FiltersList(
                                   filters: state.filters,
-                                  bloc: editImageScreenBloc));
-                        } else if (state is ImageFilterSuccessState) {
-                          editImageScreenBloc
-                              .add(FiltersButtonHasBeenPressed());
-                          return Container(
-                              margin: EdgeInsets.only(top: 30.0, left: 5.0),
-                              height: 100.0,
-                              width: double.infinity,
-                              child: FiltersList(
-                                  filters: state.filters,
-                                  bloc: editImageScreenBloc));
-                        } else if (state is ChangeTimerSuccessState) {
+                                  bloc: filterBloc)
+                          );
+                        }
+                        else if (state is ChangeTimerSuccessState) {
                           //User change total time
                           currentTotalTime = state.totalTime;
-                          editImageScreenBloc
-                              .add(ParametersButtonHasBeenPressed());
+                          editImageScreenBloc.add(ParameterChangedEvent());
                           return ParametersMenuWidget(
                               totalTime: currentTotalTime,
                               numOfPieces: currentNumOfPieces,
                               bloc: editImageScreenBloc);
                         } else if (state is ChangePiecesSuccessState) {
                           //User change number of pieces
-
                           currentNumOfPieces = state.numOfPieces;
-                          editImageScreenBloc
-                              .add(ParametersButtonHasBeenPressed());
+                          editImageScreenBloc.add(ParameterChangedEvent());
+                          return ParametersMenuWidget(
+                              totalTime: currentTotalTime,
+                              numOfPieces: currentNumOfPieces,
+                              bloc: editImageScreenBloc);
+                        } else if(state is ChangeParametersSuccessState){
                           return ParametersMenuWidget(
                               totalTime: currentTotalTime,
                               numOfPieces: currentNumOfPieces,
@@ -245,5 +281,7 @@ class _EditImageScreenState extends State<EditImageScreen> {
     super.dispose();
     editImageScreenBloc.close();
     appBarBloc.close();
+    rotationBloc.close();
+    filterBloc.close();
   }
 }

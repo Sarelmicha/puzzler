@@ -7,22 +7,18 @@ class EditImageScreenScreenInitial extends EditImageScreenEvent {
   List<Object> get props => null;
 }
 
-class FiltersButtonHasBeenPressed extends EditImageScreenEvent {
-
-
-  @override
-  List<Object> get props => null;
-}
 
 class ParametersButtonHasBeenPressed extends EditImageScreenEvent {
   @override
   List<Object> get props => null;
 }
 
-class RotateButtonHasBeenPressed extends EditImageScreenEvent {
+class FiltersButtonHasBeenPressed extends EditImageScreenEvent {
+
   @override
   List<Object> get props => null;
 }
+
 
 class StickersButtonHasBeenPressed extends EditImageScreenEvent {
   @override
@@ -34,49 +30,10 @@ class SendButtonHasBeenPressed extends EditImageScreenEvent {
   List<Object> get props => null;
 }
 
-class NoFilterHasBeenPressed extends EditImageScreenEvent {
-  @override
-  List<Object> get props => null;
-}
 
-class ClassicHasBeenPressed extends EditImageScreenEvent {
-  @override
-  List<Object> get props => null;
-}
-
-class RetroHasBeenPressed extends EditImageScreenEvent {
-  @override
-  List<Object> get props => null;
-}
-
-class SphinexHasBeenPressed extends EditImageScreenEvent {
-  @override
-  List<Object> get props => null;
-}
-
-class RubyHasBeenPressed extends EditImageScreenEvent {
-  @override
-  List<Object> get props => null;
-}
-
-class ClipperdHasBeenPressed extends EditImageScreenEvent {
-  @override
-  List<Object> get props => null;
-}
-
-class SaphirHasBeenPressed extends EditImageScreenEvent {
-  @override
-  List<Object> get props => null;
-}
-
-class CleanHasBeenPressed extends EditImageScreenEvent {
-  @override
-  List<Object> get props => null;
-}
 
 class TimerRightButtonHasBeenPressed extends EditImageScreenEvent {
   @override
-  // TODO: implement props
   List<Object> get props => null;
 }
 
@@ -98,6 +55,16 @@ class PiecesRightButtonHasBeenPressed extends EditImageScreenEvent {
   // TODO: implement props
   List<Object> get props => null;
 }
+
+class ParameterChangedEvent extends EditImageScreenEvent {
+  @override
+  // TODO: implement props
+  List<Object> get props => null;
+
+}
+
+
+
 
 
 

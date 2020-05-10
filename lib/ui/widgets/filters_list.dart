@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:puzzlechat/bloc/edit_image_screen_bloc/edit_image_screen_bloc.dart';
+import 'package:puzzlechat/bloc/edit_image_screen_bloc/filter_bloc/filter_bloc.dart';
 import 'package:puzzlechat/data/filter.dart';
-import 'package:puzzlechat/ui/screens/edit_image_screen.dart';
 import 'package:puzzlechat/ui/widgets/filter_widget.dart';
 
 class FiltersList extends StatelessWidget {
 
   final List<Filter> filters;
-  final EditImageScreenBloc bloc;
+  final FilterBloc bloc;
 
   FiltersList({@required this.filters, @required this.bloc});
 
@@ -23,7 +22,6 @@ class FiltersList extends StatelessWidget {
         return FilterWidget(
                 filter: filters[index],
                 onTap: (){
-                  //TODO - when click change the color
                   bloc.add(filters[index].event);
                 },
               );
