@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:puzzlechat/bloc/edit_image_screen_bloc/filter_bloc/filter_bloc.dart';
+import 'package:puzzlechat/bloc/edit_image_screen_bloc/image_bloc/image_bloc.dart';
 import 'package:puzzlechat/data/filter.dart';
 import 'package:puzzlechat/ui/widgets/filter_widget.dart';
 
 class FiltersList extends StatelessWidget {
 
   final List<Filter> filters;
-  final FilterBloc bloc;
+  final ImageBloc bloc;
 
   FiltersList({@required this.filters, @required this.bloc});
 

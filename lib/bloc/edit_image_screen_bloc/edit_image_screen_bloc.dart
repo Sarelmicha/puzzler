@@ -2,11 +2,12 @@ import 'dart:io';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:puzzlechat/bloc/edit_image_screen_bloc/edit_image_screen_event.dart';
 import 'package:puzzlechat/bloc/edit_image_screen_bloc/edit_image_screen_state.dart';
-import 'package:puzzlechat/bloc/edit_image_screen_bloc/filter_bloc/filter_event.dart';
+import 'package:puzzlechat/bloc/edit_image_screen_bloc/image_event.dart';
 
 import '../../data/filter.dart';
 import 'edit_image_screen_event.dart';
 import 'edit_image_screen_state.dart';
+import 'image_bloc/image_event.dart';
 
 class EditImageScreenBloc
     extends Bloc<EditImageScreenEvent, EditImageScreenState> {
@@ -99,7 +100,7 @@ class EditImageScreenBloc
       false
     ];
 
-    List<EditImageScreenEvent> events = [
+    List<ImageEvent> events = [
       NoFilterHasBeenPressed(),
       ClassicHasBeenPressed(),
       RetroHasBeenPressed(),

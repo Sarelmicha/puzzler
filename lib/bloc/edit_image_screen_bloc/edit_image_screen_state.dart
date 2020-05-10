@@ -6,6 +6,7 @@ import '../../data/filter.dart';
 
 abstract class EditImageScreenState extends Equatable {}
 
+
 class EditImageScreenInitialState extends EditImageScreenState {
   @override
   List<Object> get props => null;
