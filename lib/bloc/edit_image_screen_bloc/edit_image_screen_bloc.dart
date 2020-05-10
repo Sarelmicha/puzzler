@@ -34,7 +34,6 @@ class EditImageScreenBloc
     } else if (event is ParametersButtonHasBeenPressed) {
       yield AddParametersSuccessState();
     } else if (event is NoFilterHasBeenPressed) {
-      print('im here bitttch');
       yield ImageFilterSuccessState(currentColor: endColors[0],filters: createFilterList() );
     } else if (event is ClassicHasBeenPressed) {
       yield ImageFilterSuccessState(currentColor: endColors[1],filters: createFilterList());

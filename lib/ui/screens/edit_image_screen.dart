@@ -113,20 +113,12 @@ class _EditImageScreenState extends State<EditImageScreen> {
                   BlocBuilder<EditImageScreenBloc, EditImageScreenState>(
                     builder: (context, state) {
                       print('first state is $state');
-                      if (state is AddParametersSuccessState) {
-                        return EditImageWidget(
-                            color: currentColor, imageFile: widget.imageFile);
-                      } else if (state is ImageFilterSuccessState) {
+                      if (state is ImageFilterSuccessState) {
+                        //User change filter image.
                         currentColor = state.currentColor;
-                        print('current color is $currentColor');
-                        return EditImageWidget(
-                            color: state.currentColor,
-                            imageFile: widget.imageFile);
-                      } else if (state is AddFiltersSuccessState) {
-                        return EditImageWidget(
-                            color: currentColor, imageFile: widget.imageFile);
                       }
-                      return Container();
+                      return EditImageWidget(
+                          color: currentColor, imageFile: widget.imageFile);
                     },
                   ),
                   Row(
@@ -183,6 +175,7 @@ class _EditImageScreenState extends State<EditImageScreen> {
                     child:
                         BlocBuilder<EditImageScreenBloc, EditImageScreenState>(
                       builder: (context, state) {
+                        //This blocBuilder show which bottom screen to show according to user choice
                         print('state is $state');
                         if (state is EditImageScreenInitialState) {
                           //When enter the screen the default is parametersMenu
@@ -191,16 +184,17 @@ class _EditImageScreenState extends State<EditImageScreen> {
                           return ParametersMenuWidget();
                         } else if (state is AddFiltersSuccessState) {
                           return Container(
-                              margin: EdgeInsets.only(top: 30.0,left: 5.0),
+                              margin: EdgeInsets.only(top: 30.0, left: 5.0),
                               height: 100.0,
                               width: double.infinity,
                               child: FiltersList(
                                   filters: state.filters,
                                   bloc: editImageScreenBloc));
                         } else if (state is ImageFilterSuccessState) {
-                          editImageScreenBloc.add(FiltersButtonHasBeenPressed());
+                          editImageScreenBloc
+                              .add(FiltersButtonHasBeenPressed());
                           return Container(
-                              margin: EdgeInsets.only(top: 30.0),
+                              margin: EdgeInsets.only(top: 30.0, left: 5.0),
                               height: 100.0,
                               width: double.infinity,
                               child: FiltersList(
