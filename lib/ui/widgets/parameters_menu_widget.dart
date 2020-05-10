@@ -1,12 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:puzzlechat/bloc/edit_image_screen_bloc/edit_image_screen_bloc.dart';
+import 'package:puzzlechat/bloc/edit_image_screen_bloc/edit_image_screen_event.dart';
 import 'package:puzzlechat/bloc/edit_image_screen_bloc/edit_image_screen_state.dart';
 import 'package:puzzlechat/ui/widgets/icon_text_field.dart';
 import 'package:puzzlechat/ui/widgets/picker_widget.dart';
 import 'package:puzzlechat/ui/widgets/rounded_button.dart';
 
 class ParametersMenuWidget extends StatelessWidget {
+
+  final int totalTime;
+  final int numOfPieces;
+  final EditImageScreenBloc bloc;
+
+  ParametersMenuWidget({@required this.totalTime,@required this.numOfPieces, @required this.bloc});
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -17,15 +25,28 @@ class ParametersMenuWidget extends StatelessWidget {
             children: <Widget>[
 
               Column(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   PickerWidget(
                     text: 'Time',
-                    value: '30',
+                    value: totalTime.toString(),
+                    onLeftTap: (){
+                      bloc.add(TimerLeftButtonHasBeenPressed());
+                    },
+                    onRightTap: (){
+                      bloc.add(TimerRightButtonHasBeenPressed());
+                    },
                   ),
                   SizedBox(height: 10.0),
                   PickerWidget(
-                    text: 'Piceses',
-                    value: '9',
+                    text: 'Pieces',
+                    value: numOfPieces.toString(),
+                    onLeftTap: (){
+                      bloc.add(PiecesLeftButtonHasBeenPressed());
+                    },
+                    onRightTap: (){
+                      bloc.add(PiecesRightButtonHasBeenPressed());
+                    },
                   ),
                 ],
               ),

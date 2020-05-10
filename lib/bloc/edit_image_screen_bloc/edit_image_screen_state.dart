@@ -58,7 +58,30 @@ class ImageFilterSuccessState extends EditImageScreenState {
   ImageFilterSuccessState({@required this.currentColor,@required this.filters});
 
   @override
-  // TODO: implement props
   List<Object> get props => null;
 
 }
+
+class ChangeTimerSuccessState extends EditImageScreenState {
+
+  final int totalTime;
+
+  ChangeTimerSuccessState({@required this.totalTime});
+
+  @override
+  List<Object> get props => null;
+
+}
+
+class ChangePiecesSuccessState extends EditImageScreenState {
+
+  final int numOfPieces;
+
+  ChangePiecesSuccessState({@required this.numOfPieces});
+
+  @override
+  List<Object> get props => null;
+
+}
+
+

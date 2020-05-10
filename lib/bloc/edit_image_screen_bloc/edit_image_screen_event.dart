@@ -74,4 +74,30 @@ class CleanHasBeenPressed extends EditImageScreenEvent {
   List<Object> get props => null;
 }
 
+class TimerRightButtonHasBeenPressed extends EditImageScreenEvent {
+  @override
+  // TODO: implement props
+  List<Object> get props => null;
+}
+
+
+class TimerLeftButtonHasBeenPressed extends EditImageScreenEvent {
+  @override
+  // TODO: implement props
+  List<Object> get props => null;
+}
+
+class PiecesLeftButtonHasBeenPressed extends EditImageScreenEvent {
+  @override
+  // TODO: implement props
+  List<Object> get props => null;
+}
+
+class PiecesRightButtonHasBeenPressed extends EditImageScreenEvent {
+  @override
+  // TODO: implement props
+  List<Object> get props => null;
+}
+
+
 

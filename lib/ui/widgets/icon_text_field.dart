@@ -29,6 +29,7 @@ class IconTextField extends StatelessWidget {
         decoration: InputDecoration(
           hintText: hint,
           hintStyle: TextStyle(
+            color: Colors.white,
             fontSize: 20,
           ),
           prefixIcon: Icon(iconData),

@@ -48,6 +48,8 @@ class _EditImageScreenState extends State<EditImageScreen> {
   AppBarBloc appBarBloc;
   EditImageScreenBloc editImageScreenBloc;
   int currentColor = 0xffffffff; //White color
+  int currentTotalTime = 30;
+  int currentNumOfPieces = 9;
 
   @override
   Widget build(BuildContext context) {
@@ -179,9 +181,16 @@ class _EditImageScreenState extends State<EditImageScreen> {
                         print('state is $state');
                         if (state is EditImageScreenInitialState) {
                           //When enter the screen the default is parametersMenu
-                          return ParametersMenuWidget();
+                          return ParametersMenuWidget(
+                            totalTime: currentTotalTime,
+                            numOfPieces: currentNumOfPieces,
+                            bloc: editImageScreenBloc,
+                          );
                         } else if (state is AddParametersSuccessState) {
-                          return ParametersMenuWidget();
+                          return ParametersMenuWidget(
+                              totalTime: currentTotalTime,
+                              numOfPieces: currentNumOfPieces,
+                              bloc: editImageScreenBloc);
                         } else if (state is AddFiltersSuccessState) {
                           return Container(
                               margin: EdgeInsets.only(top: 30.0, left: 5.0),
@@ -200,6 +209,25 @@ class _EditImageScreenState extends State<EditImageScreen> {
                               child: FiltersList(
                                   filters: state.filters,
                                   bloc: editImageScreenBloc));
+                        } else if (state is ChangeTimerSuccessState) {
+                          //User change total time
+                          currentTotalTime = state.totalTime;
+                          editImageScreenBloc
+                              .add(ParametersButtonHasBeenPressed());
+                          return ParametersMenuWidget(
+                              totalTime: currentTotalTime,
+                              numOfPieces: currentNumOfPieces,
+                              bloc: editImageScreenBloc);
+                        } else if (state is ChangePiecesSuccessState) {
+                          //User change number of pieces
+
+                          currentNumOfPieces = state.numOfPieces;
+                          editImageScreenBloc
+                              .add(ParametersButtonHasBeenPressed());
+                          return ParametersMenuWidget(
+                              totalTime: currentTotalTime,
+                              numOfPieces: currentNumOfPieces,
+                              bloc: editImageScreenBloc);
                         }
                         return Container();
                       },

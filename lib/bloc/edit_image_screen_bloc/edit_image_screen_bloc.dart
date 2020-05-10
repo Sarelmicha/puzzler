@@ -18,6 +18,18 @@ class EditImageScreenBloc
     0xfff4edec
   ];
 
+  List<int> times = [
+    30,
+    60,
+    90,
+    120,
+  ];
+
+  List<int> pieces = [9, 16, 25, 36];
+
+  int currentTimeIndex = 0;
+  int currentPiecesIndex = 0;
+
   EditImageScreenBloc({this.imageFile});
 
   @override
@@ -34,21 +46,50 @@ class EditImageScreenBloc
     } else if (event is ParametersButtonHasBeenPressed) {
       yield AddParametersSuccessState();
     } else if (event is NoFilterHasBeenPressed) {
-      yield ImageFilterSuccessState(currentColor: endColors[0],filters: createFilterList() );
+      yield ImageFilterSuccessState(
+          currentColor: endColors[0], filters: createFilterList());
     } else if (event is ClassicHasBeenPressed) {
-      yield ImageFilterSuccessState(currentColor: endColors[1],filters: createFilterList());
+      yield ImageFilterSuccessState(
+          currentColor: endColors[1], filters: createFilterList());
     } else if (event is RetroHasBeenPressed) {
-      yield ImageFilterSuccessState(currentColor: endColors[2],filters: createFilterList());
+      yield ImageFilterSuccessState(
+          currentColor: endColors[2], filters: createFilterList());
     } else if (event is SphinexHasBeenPressed) {
-      yield ImageFilterSuccessState(currentColor: endColors[3],filters: createFilterList());
+      yield ImageFilterSuccessState(
+          currentColor: endColors[3], filters: createFilterList());
     } else if (event is RubyHasBeenPressed) {
-      yield ImageFilterSuccessState(currentColor: endColors[4], filters: createFilterList());
+      yield ImageFilterSuccessState(
+          currentColor: endColors[4], filters: createFilterList());
     } else if (event is ClipperdHasBeenPressed) {
-      yield ImageFilterSuccessState(currentColor: endColors[5], filters: createFilterList());
+      yield ImageFilterSuccessState(
+          currentColor: endColors[5], filters: createFilterList());
     } else if (event is SaphirHasBeenPressed) {
-      yield ImageFilterSuccessState(currentColor: endColors[6], filters: createFilterList());
+      yield ImageFilterSuccessState(
+          currentColor: endColors[6], filters: createFilterList());
     } else if (event is CleanHasBeenPressed) {
-      yield ImageFilterSuccessState(currentColor: endColors[7], filters: createFilterList());
+      yield ImageFilterSuccessState(
+          currentColor: endColors[7], filters: createFilterList());
+    } else if (event is TimerRightButtonHasBeenPressed) {
+      if (currentTimeIndex == times.length - 1) {
+        currentTimeIndex = -1;
+      }
+      yield ChangeTimerSuccessState(totalTime: times[++currentTimeIndex]);
+    } else if (event is TimerLeftButtonHasBeenPressed) {
+      if (currentTimeIndex == 0) {
+        currentTimeIndex = times.length;
+      }
+      yield ChangeTimerSuccessState(totalTime: times[--currentTimeIndex]);
+    } else if (event is PiecesRightButtonHasBeenPressed) {
+      if (currentPiecesIndex == pieces.length - 1) {
+        currentPiecesIndex = -1;
+      }
+      yield ChangePiecesSuccessState(numOfPieces: pieces[++currentPiecesIndex]);
+    } else if (event is PiecesLeftButtonHasBeenPressed) {
+      if (currentPiecesIndex == 0) {
+        currentPiecesIndex = pieces.length;
+      }
+
+      yield ChangePiecesSuccessState(numOfPieces: pieces[--currentPiecesIndex]);
     }
   }
 
@@ -85,7 +126,6 @@ class EditImageScreenBloc
       ClipperdHasBeenPressed(),
       SaphirHasBeenPressed(),
       CleanHasBeenPressed(),
-
     ];
 
     for (int i = 0; i < numOfFilters; i++) {

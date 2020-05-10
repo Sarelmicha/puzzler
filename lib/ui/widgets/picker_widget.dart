@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:puzzlechat/bloc/edit_image_screen_bloc/edit_image_screen_bloc.dart';
 import 'package:puzzlechat/util/contstants.dart';
 
 class PickerWidget extends StatelessWidget {
 
   final String text;
   final String value;
+  final Function onRightTap;
+  final Function onLeftTap;
 
-  PickerWidget({@required this.text, @required this.value});
+  PickerWidget({@required this.text, @required this.value, @required this.onLeftTap, @required this.onRightTap});
 
   @override
   Widget build(BuildContext context) {
@@ -21,10 +24,13 @@ class PickerWidget extends StatelessWidget {
           ),
         ),
         SizedBox(width: 20.0),
-        Icon(
-          Icons.arrow_left,
-          color: Colors.white,
-          size: 30.0,
+        GestureDetector(
+          onTap: onLeftTap,
+          child: Icon(
+            Icons.arrow_left,
+            color: Colors.white,
+            size: 30.0,
+          ),
         ),
         Text(
           value,
@@ -32,10 +38,13 @@ class PickerWidget extends StatelessWidget {
             fontSize: 30
           ),
         ),
-        Icon(
-          Icons.arrow_right,
-          color: Colors.white,
-          size: 30.0,
+        GestureDetector(
+          onTap: onRightTap,
+          child: Icon(
+            Icons.arrow_right,
+            color: Colors.white,
+            size: 30.0,
+          ),
         ),
       ],
     );
