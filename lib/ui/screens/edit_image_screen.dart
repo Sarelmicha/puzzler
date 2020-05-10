@@ -56,7 +56,7 @@ class _EditImageScreenState extends State<EditImageScreen> {
   AppBarBloc appBarBloc;
   EditImageScreenBloc editImageScreenBloc;
   ImageBloc imageBloc;
-  Color parametersIcon = Colors.purpleAccent;
+  Color parametersIcon = Color(0xffb000e0);
   Color stickersIcon = Colors.white;
   Color filtersIcon = Colors.white;
 
