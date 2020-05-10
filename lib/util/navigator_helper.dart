@@ -25,7 +25,7 @@ class NavigatorHelper {
   
   static void navigateToLobbyScreen(BuildContext context, FirebaseUser user) {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-      return LobbyScreenParent();
+      return LobbyScreenParent(currentUser: user);
     }));
   }
   
