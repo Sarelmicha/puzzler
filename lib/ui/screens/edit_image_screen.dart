@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:like_button/like_button.dart';
 import 'package:puzzlechat/bloc/app_bar_bloc/app_bar_bloc.dart';
 import 'package:puzzlechat/bloc/app_bar_bloc/app_bar_event.dart';
 import 'package:puzzlechat/bloc/edit_image_screen_bloc/edit_image_screen_bloc.dart';
@@ -71,7 +72,6 @@ class _EditImageScreenState extends State<EditImageScreen> {
     editImageScreenBloc = BlocProvider.of<EditImageScreenBloc>(context);
     imageBloc = BlocProvider.of<ImageBloc>(context);
 
-
     return WillPopScope(
       onWillPop: () {
         //TODO - check why the event of widget.pickImageScreenBloc doesnt send back the bloc
@@ -136,8 +136,7 @@ class _EditImageScreenState extends State<EditImageScreen> {
                         //User changed image rotation
                         currentImageRotation = state.rotation;
                         imageBloc.add(RotationChangedEvent());
-                      }
-                      else if (state is SelectFilterSuccessState) {
+                      } else if (state is SelectFilterSuccessState) {
                         //User change filter image.
                         currentColor = state.currentColor;
                         imageBloc.add(FilterChangedEvent());
@@ -171,15 +170,21 @@ class _EditImageScreenState extends State<EditImageScreen> {
                       SizedBox(
                         width: 10.0,
                       ),
-                      GestureDetector(
-                        onTap: () {
-                          imageBloc.add(RotateButtonHasBeenPressed());
+                      LikeButton(
+                        onTap: onRotationButtonTapped,
+                        size: 30,
+                        circleColor: CircleColor(
+                            start: Colors.purpleAccent, end: Colors.purple),
+                        bubblesColor: BubblesColor(
+                            dotPrimaryColor: Colors.pink,
+                            dotSecondaryColor: Colors.pinkAccent),
+                        likeBuilder: (bool isLiked) {
+                          return Icon(
+                            Icons.rotate_right,
+                            color: Colors.white,
+                            size: 30.0,
+                          );
                         },
-                        child: Icon(
-                          Icons.rotate_right,
-                          color: Colors.white,
-                          size: 30.0,
-                        ),
                       ),
                       SizedBox(
                         width: 10.0,
@@ -202,7 +207,6 @@ class _EditImageScreenState extends State<EditImageScreen> {
                             parametersIcon = Colors.white;
                             stickersIcon = Colors.white;
                           });
-
                         },
                         child: Icon(
                           Icons.palette,
@@ -287,5 +291,17 @@ class _EditImageScreenState extends State<EditImageScreen> {
     editImageScreenBloc.close();
     appBarBloc.close();
     imageBloc.close();
+  }
+
+  Future<bool> onRotationButtonTapped(bool isLiked) async {
+    imageBloc.add(RotateButtonHasBeenPressed());
+
+    /// send your request here
+    // final bool success= await sendRequest();
+
+    /// if failed, you can do nothing
+    // return success? !isLiked:isLiked;
+
+    return !isLiked;
   }
 }

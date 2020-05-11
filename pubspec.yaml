@@ -20,6 +20,8 @@ dependencies:
   dotted_border: ^1.0.5
   animated_widgets: ^1.0.4
   image_picker:
+  like_button: ^0.2.0
+
 
 
 

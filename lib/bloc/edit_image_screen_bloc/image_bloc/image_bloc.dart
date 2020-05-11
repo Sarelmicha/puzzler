@@ -11,7 +11,7 @@ class ImageBloc
 
   static const int MAX_ROTATION = 3;
   static const int MIN_ROTATION = -1;
-  int currentImageRotation = MIN_ROTATION;
+  int currentImageRotation = MIN_ROTATION + 1;
 
   File imageFile;
 
