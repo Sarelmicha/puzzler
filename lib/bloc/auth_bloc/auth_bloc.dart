@@ -10,8 +10,6 @@ class AuthBloc extends Bloc<AuthEvent,AuthState> {
 
   AuthBloc() {
     this.userRepository = UserRepository();
-    //Signout for some test
-      //userRepository.signOut();
   }
 
   @override

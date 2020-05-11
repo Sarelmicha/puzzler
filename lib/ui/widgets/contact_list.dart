@@ -14,7 +14,7 @@ class ContactList extends StatelessWidget {
           return ListView.builder(
             itemBuilder: (context, index) {
               return ContactTile(
-                name: state.contacts[index].name,
+                name: state.contacts[index].name != null? state.contacts[index].name : "unknown",
                 avatarUrl: state.contacts[index].avatarUrl,
               );
             },

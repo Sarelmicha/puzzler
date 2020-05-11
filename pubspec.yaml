@@ -21,6 +21,8 @@ dependencies:
   animated_widgets: ^1.0.4
   image_picker:
   like_button: ^0.2.0
+  contacts_service: ^0.4.6
+  permission_handler: ^5.0.0+hotfix.5
 
 
 
