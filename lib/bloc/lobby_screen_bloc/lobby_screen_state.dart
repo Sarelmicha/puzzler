@@ -16,7 +16,7 @@ class LobbyScreenLoading extends LobbyScreenState {
 
 class LobbyScreenReady extends LobbyScreenState {
 
-  List<Contact> contacts = <Contact>[];
+  final List<Contact> contacts;
 
   LobbyScreenReady({@required this.contacts});
 
@@ -27,7 +27,7 @@ class LobbyScreenReady extends LobbyScreenState {
 
 class LobbyScreenFailure extends LobbyScreenState {
 
-  String message;
+  final String message;
 
   LobbyScreenFailure({@required this.message});
 

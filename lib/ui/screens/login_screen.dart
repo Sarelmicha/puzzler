@@ -4,10 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:puzzlechat/bloc/login_bloc/login_bloc.dart';
 import 'package:puzzlechat/bloc/login_bloc/login_event.dart';
 import 'package:puzzlechat/bloc/login_bloc/login_state.dart';
-import 'package:puzzlechat/ui/widgets/form_widget.dart';
 import 'package:puzzlechat/ui/widgets/rounded_button.dart';
 import 'package:puzzlechat/util/navigator_helper.dart';
 import 'package:puzzlechat/util/contstants.dart';
+import 'package:puzzlechat/ui/widgets/icon_text_field.dart';
+
 
 class LoginScreenParent extends StatelessWidget {
   @override
@@ -27,8 +28,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
 
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
   LoginBloc loginBloc;
 
 
@@ -65,6 +65,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 else if (state is LoginSuccessState) {
                   NavigatorHelper.navigateToLobbyScreen(context, state.user);
                 }
+                else if(state is CodeState) {
+
+                  NavigatorHelper.navigateToSMSCodeScreenScreen(context,state.verificationId);
+
+                }
                 else if (state is LoginFailureState) {
                   NavigatorHelper.navigateBackToPreviousScreen(context);
                 }
@@ -84,9 +89,13 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
             SizedBox(width: 10.0),
-            FormWidget(
-              emailController: emailController,
-              passwordController: passwordController,
+            IconTextField(
+              controller: phoneController,
+              hint: "Phone Number",
+              obscureText: false,
+              textInputType: TextInputType.phone,
+              iconData: Icons.phone,
+              padding: EdgeInsets.all(10),
             ),
             SizedBox(
               height: 10.0,
@@ -100,23 +109,12 @@ class _LoginScreenState extends State<LoginScreen> {
               height: 42,
               onPressed: () {
                 loginBloc.add(LoginButtonPressedEvent(
-                  email: emailController.text.trim(),
-                  password: passwordController.text.trim(),
+                 phoneNumber: phoneController.text.trim()
                 ));
               },
             ),
             SizedBox(
               height: 10,
-            ),
-            GestureDetector(
-              child: Text(
-                "Don't have an account? Signup",
-                style: TextStyle(
-                    color: Colors.white, fontWeight: FontWeight.bold),
-              ),
-              onTap: () {
-                NavigatorHelper.navigateToSignupScreen(context);
-              },
             ),
           ],
         ),

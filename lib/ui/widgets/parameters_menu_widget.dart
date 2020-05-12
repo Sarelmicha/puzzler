@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:puzzlechat/bloc/edit_image_screen_bloc/edit_image_screen_bloc.dart';
 import 'package:puzzlechat/bloc/edit_image_screen_bloc/edit_image_screen_event.dart';
-import 'package:puzzlechat/bloc/edit_image_screen_bloc/edit_image_screen_state.dart';
 import 'package:puzzlechat/ui/widgets/icon_text_field.dart';
 import 'package:puzzlechat/ui/widgets/picker_widget.dart';
 import 'package:puzzlechat/ui/widgets/rounded_button.dart';

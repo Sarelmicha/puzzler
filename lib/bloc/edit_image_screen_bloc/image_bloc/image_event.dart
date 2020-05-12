@@ -1,7 +1,5 @@
-import 'package:equatable/equatable.dart';
 import 'package:puzzlechat/bloc/edit_image_screen_bloc/image_event.dart';
 
-import '../edit_image_screen_event.dart';
 
 
 class FilterChangedEvent extends ImageEvent {

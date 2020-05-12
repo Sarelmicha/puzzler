@@ -16,6 +16,18 @@ class LoginLoadingState extends LoginState {
   List<Object> get props => null;
 }
 
+class CodeState extends LoginState {
+
+  final String verificationId;
+
+  CodeState({this.verificationId});
+
+  @override
+  // TODO: implement props
+  List<Object> get props => null;
+
+}
+
 
 class LoginSuccessState extends LoginState {
 

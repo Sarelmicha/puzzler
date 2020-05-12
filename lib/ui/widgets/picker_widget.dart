@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:puzzlechat/bloc/edit_image_screen_bloc/edit_image_screen_bloc.dart';
 import 'package:puzzlechat/util/contstants.dart';
 
 class PickerWidget extends StatelessWidget {

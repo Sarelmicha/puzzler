@@ -2,37 +2,37 @@ import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 
-abstract class UserRegState extends Equatable {}
+abstract class SMSCodeState extends Equatable {}
 
-class UserRegInitial extends UserRegState {
+class SMSCodeInitial extends SMSCodeState {
   @override
   // TODO: implement props
   List<Object> get props => null;
 }
 
-class UserLoadingState extends UserRegState {
+class SMSCodeLoadingState extends SMSCodeState {
   @override
   // TODO: implement props
   List<Object> get props => null;
 
 }
 
-class UserRegSuccessful extends UserRegState {
+class SMSCodeSuccessful extends SMSCodeState {
 
   final FirebaseUser user;
 
-  UserRegSuccessful({@required this.user});
+  SMSCodeSuccessful({@required this.user});
 
   @override
   // TODO: implement props
   List<Object> get props => null;
 }
 
-class UserRegFailure extends UserRegState {
+class SMSCodeFailure extends SMSCodeState {
 
   final String message;
 
-  UserRegFailure({@required this.message});
+  SMSCodeFailure({@required this.message});
 
   @override
   // TODO: implement props

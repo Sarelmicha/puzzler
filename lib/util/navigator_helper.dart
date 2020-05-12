@@ -6,7 +6,7 @@ import 'package:puzzlechat/ui/screens/edit_image_screen.dart';
 import 'package:puzzlechat/ui/screens/pick_image_screen.dart';
 import 'package:puzzlechat/ui/screens/lobby_screen.dart';
 import 'package:puzzlechat/ui/screens/login_screen.dart';
-import 'package:puzzlechat/ui/screens/signup_screen.dart';
+import 'package:puzzlechat/ui/screens/sms_code_screen.dart';
 import 'package:puzzlechat/ui/screens/splash_screen.dart';
 
 class NavigatorHelper {
@@ -29,9 +29,9 @@ class NavigatorHelper {
     }));
   }
   
-  static void navigateToSignupScreen(BuildContext context) {
+  static void navigateToSMSCodeScreenScreen(BuildContext context,String verificationId) {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-      return SignupPageParent();
+      return SMSCodeScreenParent(verificationId: verificationId,);
     }));
   }
 
