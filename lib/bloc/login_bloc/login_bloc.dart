@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:puzzlechat/bloc/login_bloc/login_event.dart';
 import 'package:puzzlechat/bloc/login_bloc/login_state.dart';
 import 'package:puzzlechat/repository/user_repository.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   UserRepository userRepository;
@@ -21,8 +23,16 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     if (event is LoginButtonPressedEvent) {
       try {
         yield LoginLoadingState();
-        var user = await userRepository.signInUser(event.email, event.password);
-        yield LoginSuccessState(user: user);
+
+        FirebaseUser user;
+        String verificationId;
+
+        await userRepository.loginUser(event.phoneNumber, user, verificationId);
+        if(user != null){
+          yield LoginSuccessState(user: user);
+        }  else {
+          yield CodeState(verificationId: verificationId);
+        }
       } catch (e) {
         if(Platform.isAndroid) {
           yield LoginFailureState(message: e.message);

@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:puzzlechat/data/game_data.dart';
-import 'package:puzzlechat/ui/screens/pick_image_screen.dart';
-import 'package:puzzlechat/ui/screens/splash_screen.dart';
 import 'package:puzzlechat/ui/widgets/rounded_button.dart';
 import 'package:puzzlechat/util/navigator_helper.dart';
 

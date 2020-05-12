@@ -32,7 +32,7 @@ class App extends StatelessWidget {
         if(state is AuthInitialState){
           return SplashScreen();
         } else if (state is AuthenticatedState){
-            return LobbyScreenParent();
+            return LobbyScreenParent(currentUser: state.user);
         } else if(state is UnAuthenticatedState){
            return LoginScreenParent();
         }

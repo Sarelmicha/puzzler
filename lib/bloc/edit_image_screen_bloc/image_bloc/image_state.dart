@@ -1,4 +1,3 @@
-import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:puzzlechat/bloc/edit_image_screen_bloc/image_state.dart';
 
