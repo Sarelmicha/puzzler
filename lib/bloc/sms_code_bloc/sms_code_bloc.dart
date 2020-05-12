@@ -9,14 +9,12 @@ class SMSCodeBloc extends Bloc<SMSCodeEvent,SMSCodeState> {
 
   UserRepository userRepository;
 
-
   SMSCodeBloc() {
     this.userRepository = UserRepository();
   }
 
   @override
   SMSCodeState get initialState => SMSCodeInitial();
-
 
   @override
   Stream<SMSCodeState> mapEventToState(SMSCodeEvent event) async* {
@@ -36,7 +34,4 @@ class SMSCodeBloc extends Bloc<SMSCodeEvent,SMSCodeState> {
        }
     }
   }
-
-
-
 }

@@ -1,9 +1,10 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
+import 'package:puzzlechat/bloc/login_bloc/login_bloc.dart';
+import 'package:puzzlechat/bloc/login_bloc/login_event.dart';
 
 class UserRepository {
-
   FirebaseAuth _firebaseAuth;
 
   UserRepository() {
@@ -26,17 +27,16 @@ class UserRepository {
         email: email, password: password);
     return result.user;
   }
-  
-  signInWithCredential(FirebaseUser user,String verificationId,String code) async {
 
+  signInWithCredential(
+      FirebaseUser user, String verificationId, String code) async {
     print('im here in signInWithCredential');
 
     AuthCredential credential = PhoneAuthProvider.getCredential(
-        verificationId: verificationId,
-        smsCode: code
-    );
+        verificationId: verificationId, smsCode: code);
 
-    print('im here after fetching credential signInWithCredential and credinital is $credential');
+    print(
+        'im here after fetching credential signInWithCredential and credinital is $credential');
 
     print('firebaseauth is $_firebaseAuth');
 
@@ -45,38 +45,39 @@ class UserRepository {
     print('result is $result');
 
     user = result.user;
-
   }
 
+  Future<void> loginUser(
+      String phoneNumber, FirebaseUser user, String verificationId, LoginBloc loginBloc) async {
+    print('start loginUser func');
 
-  Future<void> loginUser(String phoneNumber,FirebaseUser user,String verificationId) async {
-
-    _firebaseAuth.verifyPhoneNumber(
+    await _firebaseAuth.verifyPhoneNumber(
         phoneNumber: phoneNumber,
         timeout: Duration(seconds: 10),
-        verificationCompleted: (AuthCredential credential) async{
-
+        verificationCompleted: (AuthCredential credential) async {
           print('in verificationCompleted ');
 
-          AuthResult result = await _firebaseAuth.signInWithCredential(credential);
+          AuthResult result =
+              await _firebaseAuth.signInWithCredential(credential);
 
           //Insert to the empty user that sent from bloc the current user
           user = result.user;
           print('user is $user');
-        },
-        verificationFailed: (AuthException exception){
+          print('user phone number is ${user.phoneNumber}');
+          print('user name is ${user.displayName}');
 
+          loginBloc.add(VerifyPhoneNumberCompleteEvent(user: user,verificationId: verificationId));
+        },
+        verificationFailed: (AuthException exception) {
           print('in verificationFailed and excepption is ${exception.message}');
           throw exception;
         },
-        codeSent: (String verId, [int forceResendingToken]){
+        codeSent: (String verId, [int forceResendingToken]) {
           print('in codeSend');
           verificationId = verId;
         },
         codeAutoRetrievalTimeout: null);
-
   }
-
 
   Future<void> signOut() async {
     await _firebaseAuth.signOut();

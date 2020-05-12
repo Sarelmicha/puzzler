@@ -15,7 +15,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
   @override
-  // TODO: implement initialState
   LoginState get initialState => LoginInitialState();
 
   @override
@@ -27,18 +26,22 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         FirebaseUser user;
         String verificationId;
 
-        await userRepository.loginUser(event.phoneNumber, user, verificationId);
-        if(user != null){
-          yield LoginSuccessState(user: user);
-        }  else {
-          yield CodeState(verificationId: verificationId);
-        }
+        userRepository.loginUser(event.phoneNumber, user, verificationId,this);
+
       } catch (e) {
         if(Platform.isAndroid) {
           yield LoginFailureState(message: e.message);
         } else {
           //TODO- in the future need to take care of IOS
         }
+      }
+    } else if(event is VerifyPhoneNumberCompleteEvent ){
+
+      print('user after loginUser func is ${event.user}');
+      if(event.user != null){
+        yield LoginSuccessState(user: event.user);
+      }  else {
+        yield CodeState(verificationId: event.verificationId);
       }
     }
   }
