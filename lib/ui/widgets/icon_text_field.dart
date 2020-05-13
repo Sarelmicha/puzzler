@@ -9,8 +9,10 @@ class IconTextField extends StatelessWidget {
   final EdgeInsets padding;
   final TextEditingController controller;
   final String errorText;
+  final Widget prefix;
 
-  IconTextField({this.iconData,this.hint,this.obscureText,this.textInputType,this.padding,this.controller,this.errorText});
+
+  IconTextField({this.iconData,this.hint,this.obscureText,this.textInputType,this.padding,this.controller,this.errorText, this.prefix});
 
 
   @override
@@ -32,6 +34,7 @@ class IconTextField extends StatelessWidget {
             fontSize: 20,
           ),
           prefixIcon: Icon(iconData),
+          prefix: prefix,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(20.0),
             borderSide: BorderSide(

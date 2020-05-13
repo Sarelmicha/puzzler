@@ -18,27 +18,21 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   @override
   Stream<LoginState> mapEventToState(LoginEvent event) async* {
     if (event is LoginButtonPressedEvent) {
-      try {
-        yield LoginLoadingState();
+      yield LoginLoadingState();
 
-        FirebaseUser user;
-        String verificationId;
+      FirebaseUser user;
+      String verificationId;
 
-        userRepository.loginUser(event.phoneNumber, user, verificationId, this);
-      } catch (e) {
-        if (Platform.isAndroid) {
-          yield LoginFailureState(message: e.message);
-        } else {
-          //TODO- in the future need to take care of IOS
-        }
-      }
-    } else if (event is VerifyPhoneNumberCompleteEvent) {
+      userRepository.loginUser(event.phoneNumber, user, verificationId, this);
+    } else if (event is VerifyPhoneNumberSuccessEvent) {
       print('user after loginUser func is ${event.user}');
       if (event.user != null) {
         yield LoginSuccessState(user: event.user);
       } else {
         yield CodeState(verificationId: event.verificationId);
       }
+    } else if (event is VerifyPhoneNumberFailureEvent) {
+      yield LoginFailureState(message: event.message);
     }
   }
 }
