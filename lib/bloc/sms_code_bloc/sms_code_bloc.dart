@@ -23,8 +23,7 @@ class SMSCodeBloc extends Bloc<SMSCodeEvent,SMSCodeState> {
       print('here in SMSBloc before loaingState');
         yield SMSCodeLoadingState();
       print('here in SMSBloc after loaingState');
-      FirebaseUser user;
-       await userRepository.signInWithCredential(user,event.verificationId, event.smsCode);
+      FirebaseUser user =  await userRepository.signInWithCredential(event.verificationId, event.smsCode);
 
        print('user from smsCodeBloc is $user');
        if(user != null) {

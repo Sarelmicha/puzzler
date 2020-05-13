@@ -23,13 +23,14 @@ class UserRepository {
   }
 
   Future<FirebaseUser> signInUser(String email, String password) async {
+
     var result = await _firebaseAuth.signInWithEmailAndPassword(
         email: email, password: password);
     return result.user;
   }
 
-  signInWithCredential(
-      FirebaseUser user, String verificationId, String code) async {
+  Future<FirebaseUser> signInWithCredential(
+      String verificationId, String code) async {
     print('im here in signInWithCredential');
 
     AuthCredential credential = PhoneAuthProvider.getCredential(
@@ -44,7 +45,7 @@ class UserRepository {
 
     print('result is $result');
 
-    user = result.user;
+    return result.user;
   }
 
   Future<void> loginUser(
