@@ -8,6 +8,8 @@ import 'package:puzzlechat/ui/widgets/rounded_button.dart';
 import 'package:puzzlechat/util/navigator_helper.dart';
 import 'package:puzzlechat/util/contstants.dart';
 import 'package:puzzlechat/ui/widgets/icon_text_field.dart';
+import 'package:flutter_country_picker/flutter_country_picker.dart';
+
 
 
 class LoginScreenParent extends StatelessWidget {
@@ -30,6 +32,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   final TextEditingController phoneController = TextEditingController();
   LoginBloc loginBloc;
+  Country _selected;
 
 
   @override
@@ -80,7 +83,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     return Text(
                       state.message,
                       style: TextStyle(
-                        color: Colors.redAccent,
+                        color: Colors.purple,
                       ),
                     );
                   }
@@ -93,6 +96,17 @@ class _LoginScreenState extends State<LoginScreen> {
               controller: phoneController,
               hint: "Phone Number",
               obscureText: false,
+              prefix: CountryPicker(
+                showDialingCode: true,
+                showFlag:  false,
+                showName: false,
+                onChanged: (Country country) {
+                  setState(() {
+                    _selected = country;
+                  });
+                },
+                selectedCountry: _selected,
+              ),
               textInputType: TextInputType.phone,
               iconData: Icons.phone,
               padding: EdgeInsets.all(10),
@@ -108,8 +122,9 @@ class _LoginScreenState extends State<LoginScreen> {
               width: 200,
               height: 42,
               onPressed: () {
+                print('phone number is +${_selected.dialingCode}${phoneController.text.trim()}');
                 loginBloc.add(LoginButtonPressedEvent(
-                 phoneNumber: phoneController.text.trim()
+                 phoneNumber: '+${_selected.dialingCode}${phoneController.text.trim()}'
                 ));
               },
             ),

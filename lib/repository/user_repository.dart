@@ -67,11 +67,11 @@ class UserRepository {
           print('user phone number is ${user.phoneNumber}');
           print('user name is ${user.displayName}');
 
-          loginBloc.add(VerifyPhoneNumberCompleteEvent(user: user,verificationId: verificationId));
+          loginBloc.add(VerifyPhoneNumberSuccessEvent(user: user,verificationId: verificationId));
         },
         verificationFailed: (AuthException exception) {
           print('in verificationFailed and excepption is ${exception.message}');
-          throw exception;
+          loginBloc.add(VerifyPhoneNumberFailureEvent(message: exception.message));
         },
         codeSent: (String verId, [int forceResendingToken]) {
           print('in codeSend');

@@ -15,12 +15,22 @@ class LoginButtonPressedEvent extends LoginEvent {
 
 }
 
-class VerifyPhoneNumberCompleteEvent extends LoginEvent {
+class VerifyPhoneNumberSuccessEvent extends LoginEvent {
 
   final FirebaseUser user;
   final String verificationId;
 
-  VerifyPhoneNumberCompleteEvent({@required this.user,@required this.verificationId});
+  VerifyPhoneNumberSuccessEvent({@required this.user,@required this.verificationId});
+
+  @override
+  List<Object> get props => null;
+
+}
+
+class VerifyPhoneNumberFailureEvent extends LoginEvent {
+
+  final String message;
+  VerifyPhoneNumberFailureEvent({@required this.message});
 
   @override
   List<Object> get props => null;
