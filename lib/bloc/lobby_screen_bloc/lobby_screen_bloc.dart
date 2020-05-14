@@ -1,5 +1,7 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:contacts_service/contacts_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -10,9 +12,11 @@ import 'package:puzzlechat/data/contact.dart' as myContact;
 
 class LobbyScreenBloc extends Bloc<LobbyScreenEvent, LobbyScreenState> {
   UserRepository userRepository;
+  FirebaseUser user;
 
-  LobbyScreenBloc() {
+  LobbyScreenBloc(FirebaseUser user) {
     this.userRepository = UserRepository();
+    this.user = user;
   }
 
   @override
@@ -29,18 +33,22 @@ class LobbyScreenBloc extends Bloc<LobbyScreenEvent, LobbyScreenState> {
         //Here comes the logic of fetching data from Firebase
         await _askPermissions();
 
-        print('here 1');
+        print('before fecthing all contact from phone');
         Iterable<Contact> contacts = await ContactsService.getContacts();
+        print('after fecthing all contact from phone');
 
         print('here 2');
 
         List<Contact> phoneContactList = contacts.toList();
 
-        for(int i = 0; i < phoneContactList.length; i++){
+        //--------------- for print for tests--------------
+        for (int i = 0; i < phoneContactList.length; i++) {
           print(phoneContactList[i].displayName);
         }
+        //---------------------------------------
 
-        List<myContact.Contact> allContactWithApp = getAllContactWithApp(phoneContactList);
+        List<myContact.Contact> allContactWithApp = await
+            getAllContactWithApp(phoneContactList);
 
         print(allContactWithApp);
 
@@ -55,20 +63,6 @@ class LobbyScreenBloc extends Bloc<LobbyScreenEvent, LobbyScreenState> {
       }
     }
   }
-
-//  Future<List<Contact>> getContacts() async {
-//    List<Contact> contacts = [];
-//
-//    int sizeOfContacts = 100; // dummy value for now.
-//    //TODO - access to Database for fetching contact data.
-//
-//    for (int i = 0; i < sizeOfContacts; i++) {
-//      contacts.add(
-//          Contact(name: 'User ${i + 1}', avatarUrl: 'images/profile_img.png'));
-//    }
-//
-//    return contacts;
-//  }
 
   Future<void> _askPermissions() async {
     PermissionStatus permissionStatus = await _getContactPermission();
@@ -104,15 +98,52 @@ class LobbyScreenBloc extends Bloc<LobbyScreenEvent, LobbyScreenState> {
     }
   }
 
-  List<myContact.Contact> getAllContactWithApp(List<Contact> contacts) {
+  Future<List<myContact.Contact>> getAllContactWithApp(List<Contact> phoneContacts) async{
 
-    List<myContact.Contact> allContactsWithApp = [];
+    List<myContact.Contact> appContacts = [];
 
-    for(int i = 0; i < contacts.length; i++){
-      allContactsWithApp.add(myContact.Contact(name: contacts[i].displayName));
+    print('here in getAllContactWithApp');
+
+      QuerySnapshot users = await userRepository.getAllUsers();
+
+    print('here in api call');
+    print('length in phoneContact ${phoneContacts.length}');
+    print('length in users is ${users.documents.length}' );
+
+      for(var user in users.documents){
+        print('here in for1');
+        for(var contact in phoneContacts){
+          print('here in for2');
+          print('length is ${contact.phones.length}');
+          if(contact.phones.length > 0) {
+            String phoneNumber = cleanPhoneNumberFromTokens(contact.phones.first.value.toString());
+            print('phoneNumber is $phoneNumber');
+
+            if (phoneNumber == user.data['phoneNumber']) {
+              print('im here!!');
+              appContacts.add(myContact.Contact(
+                  name: contact.displayName,
+                  phoneNumber: phoneNumber,
+              ));
+            }
+          }
+        }
+      }
+
+
+      for(int i = 0; i < appContacts.length; i++){
+        print('contact is ${appContacts[i]}');
+      }
+
+    return appContacts;
+  }
+
+  String cleanPhoneNumberFromTokens(String phoneNumber) {
+
+    if(phoneNumber.substring(0,1) == '+'){
+      return phoneNumber.replaceAll('-', '').replaceAll(' ', '').replaceAll('(', '').replaceAll(')', '');
     }
 
-    return allContactsWithApp;
-
+    return phoneNumber;
   }
 }

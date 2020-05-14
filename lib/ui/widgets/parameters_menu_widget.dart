@@ -9,9 +9,11 @@ class ParametersMenuWidget extends StatelessWidget {
 
   final int totalTime;
   final int numOfPieces;
+  final String receiverPhoneNumber;
+  final String senderPhoneNumber;
   final EditImageScreenBloc bloc;
 
-  ParametersMenuWidget({@required this.totalTime,@required this.numOfPieces, @required this.bloc});
+  ParametersMenuWidget({@required this.totalTime,@required this.numOfPieces,@required this.receiverPhoneNumber, @required this.bloc, @required this.senderPhoneNumber});
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +57,9 @@ class ParametersMenuWidget extends StatelessWidget {
                 text: 'SEND',
                 width: 100,
                 height: 50,
+                onPressed: (){
+                  bloc.add(SendButtonHasBeenPressed(receiverPhoneNumber: receiverPhoneNumber,totalTime: totalTime,numOfPieces: numOfPieces,senderPhoneNumber: senderPhoneNumber));
+                },
               ),
             ],
           ),

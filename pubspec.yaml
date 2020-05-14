@@ -24,6 +24,8 @@ dependencies:
   contacts_service: ^0.4.6
   permission_handler: ^5.0.0+hotfix.5
   flutter_country_picker: ^0.1.6
+  cloud_firestore: ^0.13.5
+
 
 
 

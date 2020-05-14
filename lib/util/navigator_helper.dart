@@ -11,15 +11,15 @@ import 'package:puzzlechat/ui/screens/splash_screen.dart';
 
 class NavigatorHelper {
 
-  static void navigateToPickImageScreen(BuildContext context) {
+  static void navigateToPickImageScreen(BuildContext context, String receiverPhoneNumber, FirebaseUser currentUser) {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-      return PickImageScreenParent();
+      return PickImageScreenParent(receiverPhoneNumber: receiverPhoneNumber,currentUser: currentUser);
     }));
   }
 
-  static void navigateToEditImageScreen(BuildContext context, File imageFile) {
+  static void navigateToEditImageScreen(BuildContext context, File imageFile, String receiverPhoneNumber, FirebaseUser currentUser) {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-      return EditImageScreenParent(imageFile: imageFile);
+      return EditImageScreenParent(imageFile: imageFile,receiverPhoneNumber : receiverPhoneNumber, currentUser: currentUser);
     }));
   }
   
