@@ -25,9 +25,7 @@ dependencies:
   permission_handler: ^5.0.0+hotfix.5
   flutter_country_picker: ^0.1.6
   cloud_firestore: ^0.13.5
-
-
-
+  firebase_storage: ^3.1.5
 
 
 dev_dependencies:
