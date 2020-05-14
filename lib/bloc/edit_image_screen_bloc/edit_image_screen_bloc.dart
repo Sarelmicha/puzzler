@@ -86,7 +86,7 @@ class EditImageScreenBloc
 
       _gameRepository.sendGame(
           event.receiverPhoneNumber,
-          convertImageToByteData(imageFile),
+          imageFile,
           event.totalTime,
           event.numOfPieces,
           event.senderPhoneNumber);
