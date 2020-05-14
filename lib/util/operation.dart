@@ -1,7 +1,0 @@
-
-enum Operation {
-
-  LOGIN,
-  SIGNUP,
-
-}

@@ -1,8 +1,11 @@
 import 'dart:io';
+import 'dart:typed_data';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:puzzlechat/bloc/edit_image_screen_bloc/edit_image_screen_event.dart';
 import 'package:puzzlechat/bloc/edit_image_screen_bloc/edit_image_screen_state.dart';
 import 'package:puzzlechat/bloc/edit_image_screen_bloc/image_event.dart';
+import 'package:puzzlechat/repository/game_repository.dart';
 
 import '../../data/filter.dart';
 import 'edit_image_screen_event.dart';
@@ -11,7 +14,15 @@ import 'image_bloc/image_event.dart';
 
 class EditImageScreenBloc
     extends Bloc<EditImageScreenEvent, EditImageScreenState> {
+  GameRepository _gameRepository;
   File imageFile;
+  BuildContext context;
+
+  EditImageScreenBloc(File imageFile) {
+    this._gameRepository = GameRepository();
+    this.imageFile = imageFile;
+  }
+
   List<int> endColors = [
     0xffffffff,
     0xffe6e1e0,
@@ -35,8 +46,6 @@ class EditImageScreenBloc
   int currentTimeIndex = 0;
   int currentPiecesIndex = 0;
   int currentImageRotation = 0;
-
-  EditImageScreenBloc({this.imageFile});
 
   @override
   EditImageScreenState get initialState => EditImageScreenInitialState();
@@ -71,6 +80,18 @@ class EditImageScreenBloc
         currentPiecesIndex = pieces.length;
       }
       yield ChangePiecesSuccessState(numOfPieces: pieces[--currentPiecesIndex]);
+    } else if (event is SendButtonHasBeenPressed) {
+
+      print('sender phone number is ${event.senderPhoneNumber}');
+
+      _gameRepository.sendGame(
+          event.receiverPhoneNumber,
+          convertImageToByteData(imageFile),
+          event.totalTime,
+          event.numOfPieces,
+          event.senderPhoneNumber);
+      yield SendImageSuccessState();
+
     } else if (event is ParameterChangedEvent) {
       yield ChangeParametersSuccessState();
     }
@@ -122,5 +143,10 @@ class EditImageScreenBloc
     }
 
     return filters;
+  }
+
+  Uint8List convertImageToByteData(File imageFile) {
+    var byteData = imageFile.readAsBytesSync();
+    return byteData;
   }
 }

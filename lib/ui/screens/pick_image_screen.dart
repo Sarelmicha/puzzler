@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:dotted_border/dotted_border.dart';
@@ -10,17 +11,29 @@ import 'package:animated_widgets/animated_widgets.dart';
 import 'package:puzzlechat/util/navigator_helper.dart';
 
 class PickImageScreenParent extends StatelessWidget {
+
+  final String receiverPhoneNumber;
+  final FirebaseUser currentUser;
+
+  PickImageScreenParent({@required this.receiverPhoneNumber,@required this.currentUser});
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider<PickImageScreenBloc>(
       create: (context) =>
           PickImageScreenBloc()..add(EnterPickImageScreenEvent()),
-      child: PickImageScreen(),
+      child: PickImageScreen(receiverPhoneNumber: receiverPhoneNumber,currentUser: currentUser),
     );
   }
 }
 
 class PickImageScreen extends StatefulWidget {
+
+  final String receiverPhoneNumber;
+  final FirebaseUser currentUser;
+
+  PickImageScreen({this.receiverPhoneNumber,this.currentUser});
+
   @override
   _PickImageScreenState createState() => _PickImageScreenState();
 }
@@ -87,10 +100,10 @@ class _PickImageScreenState extends State<PickImageScreen> {
 
                   if (state is CameraSuccessState) {
                     NavigatorHelper.navigateToEditImageScreen(
-                        context, state.imageFile);
+                        context, state.imageFile,widget.receiverPhoneNumber,widget.currentUser);
                   } else if (state is GallerySuccessState) {
                     NavigatorHelper.navigateToEditImageScreen(
-                        context, state.imageFile);
+                        context, state.imageFile,widget.receiverPhoneNumber,widget.currentUser);
                   }
                 },
                 child: BlocBuilder<PickImageScreenBloc, PickImageScreenState>(

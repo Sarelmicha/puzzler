@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:like_button/like_button.dart';
@@ -21,22 +22,25 @@ import 'package:puzzlechat/ui/widgets/filters_list.dart';
 import '../../bloc/edit_image_screen_bloc/edit_image_screen_state.dart';
 
 class EditImageScreenParent extends StatelessWidget {
+
   final File imageFile;
+  final String receiverPhoneNumber;
+  final FirebaseUser currentUser;
   final PickImageScreenBloc pickImageScreenBloc;
 
-  EditImageScreenParent({this.imageFile, this.pickImageScreenBloc});
+  EditImageScreenParent({this.imageFile, this.pickImageScreenBloc, this.receiverPhoneNumber, this.currentUser});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<EditImageScreenBloc>(
       create: (context) => EditImageScreenBloc(
-        imageFile: imageFile,
+        imageFile,
       )..add(ParametersButtonHasBeenPressed()),
       child: BlocProvider(
         create: (context) => ImageBloc(imageFile: imageFile),
         child: BlocProvider<AppBarBloc>(
           create: (context) => AppBarBloc(),
-          child: EditImageScreen(imageFile: imageFile),
+          child: EditImageScreen(imageFile: imageFile,receiverPhoneNumber: receiverPhoneNumber, currentUser: currentUser),
         ),
       ),
     );
@@ -46,8 +50,10 @@ class EditImageScreenParent extends StatelessWidget {
 class EditImageScreen extends StatefulWidget {
   final File imageFile;
   final PickImageScreenBloc pickImageScreenBloc;
+  final String receiverPhoneNumber;
+  final FirebaseUser currentUser;
 
-  EditImageScreen({this.imageFile, this.pickImageScreenBloc});
+  EditImageScreen({this.imageFile, this.pickImageScreenBloc, this.receiverPhoneNumber, this.currentUser});
 
   @override
   _EditImageScreenState createState() => _EditImageScreenState();
@@ -225,7 +231,11 @@ class _EditImageScreenState extends State<EditImageScreen> {
                   ),
                   BlocListener<EditImageScreenBloc, EditImageScreenState>(
                     listener: (context, state) {
-                      //TODO- pass to next screen wehn Send button has been pressed
+                      if(state is SendImageSuccessState){
+                        NavigatorHelper.navigateToLobbyScreen(context,widget.currentUser);
+
+                      }
+
                     },
                     child:
                         BlocBuilder<EditImageScreenBloc, EditImageScreenState>(
@@ -237,6 +247,8 @@ class _EditImageScreenState extends State<EditImageScreen> {
                           return ParametersMenuWidget(
                             totalTime: currentTotalTime,
                             numOfPieces: currentNumOfPieces,
+                            receiverPhoneNumber: widget.receiverPhoneNumber,
+                            senderPhoneNumber : widget.currentUser.phoneNumber,
                             bloc: editImageScreenBloc,
                           );
                         } else if (state
@@ -244,6 +256,8 @@ class _EditImageScreenState extends State<EditImageScreen> {
                           return ParametersMenuWidget(
                               totalTime: currentTotalTime,
                               numOfPieces: currentNumOfPieces,
+                              receiverPhoneNumber: widget.receiverPhoneNumber,
+                              senderPhoneNumber : widget.currentUser.phoneNumber,
                               bloc: editImageScreenBloc);
                         } else if (state is FiltersBottomScreenSuccessState) {
                           return Container(
@@ -259,6 +273,8 @@ class _EditImageScreenState extends State<EditImageScreen> {
                           return ParametersMenuWidget(
                               totalTime: currentTotalTime,
                               numOfPieces: currentNumOfPieces,
+                              receiverPhoneNumber: widget.receiverPhoneNumber,
+                              senderPhoneNumber : widget.currentUser.phoneNumber,
                               bloc: editImageScreenBloc);
                         } else if (state is ChangePiecesSuccessState) {
                           //User change number of pieces
@@ -267,11 +283,14 @@ class _EditImageScreenState extends State<EditImageScreen> {
                           return ParametersMenuWidget(
                               totalTime: currentTotalTime,
                               numOfPieces: currentNumOfPieces,
+                              receiverPhoneNumber: widget.receiverPhoneNumber,
                               bloc: editImageScreenBloc);
                         } else if (state is ChangeParametersSuccessState) {
                           return ParametersMenuWidget(
                               totalTime: currentTotalTime,
                               numOfPieces: currentNumOfPieces,
+                              receiverPhoneNumber: widget.receiverPhoneNumber,
+                              senderPhoneNumber : widget.currentUser.phoneNumber,
                               bloc: editImageScreenBloc);
                         }
                         return Container();

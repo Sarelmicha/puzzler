@@ -26,6 +26,14 @@ class StickersButtonHasBeenPressed extends EditImageScreenEvent {
 }
 
 class SendButtonHasBeenPressed extends EditImageScreenEvent {
+
+  final String receiverPhoneNumber;
+  final int totalTime;
+  final int numOfPieces;
+  final String senderPhoneNumber;
+
+  SendButtonHasBeenPressed({this.receiverPhoneNumber,this.totalTime, this.numOfPieces, this.senderPhoneNumber});
+
   @override
   List<Object> get props => null;
 }
@@ -40,25 +48,21 @@ class TimerRightButtonHasBeenPressed extends EditImageScreenEvent {
 
 class TimerLeftButtonHasBeenPressed extends EditImageScreenEvent {
   @override
-  // TODO: implement props
   List<Object> get props => null;
 }
 
 class PiecesLeftButtonHasBeenPressed extends EditImageScreenEvent {
   @override
-  // TODO: implement props
   List<Object> get props => null;
 }
 
 class PiecesRightButtonHasBeenPressed extends EditImageScreenEvent {
   @override
-  // TODO: implement props
   List<Object> get props => null;
 }
 
 class ParameterChangedEvent extends EditImageScreenEvent {
   @override
-  // TODO: implement props
   List<Object> get props => null;
 
 }

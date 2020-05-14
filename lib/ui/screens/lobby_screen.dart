@@ -23,13 +23,17 @@ class LobbyScreenParent extends StatelessWidget {
     return BlocProvider<AppBarBloc>(
       create: (context) => AppBarBloc(),
       child: BlocProvider<LobbyScreenBloc>(
-          create: (context) => LobbyScreenBloc()..add(EnterLobbyEvent()),
-          child: LobbyScreen()),
+          create: (context) => LobbyScreenBloc(currentUser)..add(EnterLobbyEvent()),
+          child: LobbyScreen(currentUser: currentUser)),
     );
   }
 }
 
 class LobbyScreen extends StatefulWidget {
+
+  final FirebaseUser currentUser;
+  LobbyScreen({this.currentUser});
+
   @override
   _LobbyScreenState createState() => _LobbyScreenState();
 }
@@ -39,9 +43,10 @@ class _LobbyScreenState extends State<LobbyScreen> {
   LobbyScreenBloc lobbyScreenBloc;
   AppBarBloc appBarBloc;
 
-
   @override
   Widget build(BuildContext context) {
+
+    print('current user from lobby Screen is ${widget.currentUser}');
 
     lobbyScreenBloc = BlocProvider.of<LobbyScreenBloc>(context);
     appBarBloc = BlocProvider.of<AppBarBloc>(context);
@@ -112,7 +117,7 @@ class _LobbyScreenState extends State<LobbyScreen> {
                     NavigatorHelper.navigateBackToPreviousScreen(context);
                   }
                 },
-                child: Center(child: ContactList()),
+                child: Center(child: ContactList(currentUser : widget.currentUser)),
               ),
             ),
           ),

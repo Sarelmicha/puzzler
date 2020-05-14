@@ -24,6 +24,7 @@ class AuthBloc extends Bloc<AuthEvent,AuthState> {
         if (isSignedIn) {
           //User already authenticated.
           var user = await userRepository.getCurrentUser();
+          print('user is $user');
           yield AuthenticatedState(user: user);
         } else {
           yield UnAuthenticatedState();

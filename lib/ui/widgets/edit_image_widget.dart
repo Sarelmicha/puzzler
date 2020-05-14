@@ -10,7 +10,6 @@ class EditImageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('color is $color');
     return Container(
       width: 350.0,
       height: 350.0,

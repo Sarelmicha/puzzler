@@ -3,8 +3,9 @@ import 'package:flutter/cupertino.dart';
 class Contact {
 
   String name;
-  String avatarUrl;
+  String phoneNumber;
 
-  Contact({@required this.name,@required this.avatarUrl});
+
+  Contact({@required this.name, @required this.phoneNumber});
 
 }

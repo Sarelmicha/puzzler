@@ -1,14 +1,18 @@
 import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:puzzlechat/bloc/login_bloc/login_bloc.dart';
 import 'package:puzzlechat/bloc/login_bloc/login_event.dart';
+import 'package:puzzlechat/data/user.dart';
 
 class UserRepository {
   FirebaseAuth _firebaseAuth;
+  Firestore _firestore;
 
   UserRepository() {
     this._firebaseAuth = FirebaseAuth.instance;
+    this._firestore = Firestore.instance;
   }
 
   Future<FirebaseUser> createUser(String email, String password) async {
@@ -23,7 +27,6 @@ class UserRepository {
   }
 
   Future<FirebaseUser> signInUser(String email, String password) async {
-
     var result = await _firebaseAuth.signInWithEmailAndPassword(
         email: email, password: password);
     return result.user;
@@ -48,8 +51,8 @@ class UserRepository {
     return result.user;
   }
 
-  Future<void> loginUser(
-      String phoneNumber, FirebaseUser user, String verificationId, LoginBloc loginBloc) async {
+  Future<void> loginUser(String phoneNumber, FirebaseUser user,
+      String verificationId, LoginBloc loginBloc) async {
     print('start loginUser func');
 
     await _firebaseAuth.verifyPhoneNumber(
@@ -67,17 +70,53 @@ class UserRepository {
           print('user phone number is ${user.phoneNumber}');
           print('user name is ${user.displayName}');
 
-          loginBloc.add(VerifyPhoneNumberSuccessEvent(user: user,verificationId: verificationId));
+          loginBloc.add(VerifyPhoneNumberSuccessEvent(
+              user: user, verificationId: verificationId));
         },
         verificationFailed: (AuthException exception) {
           print('in verificationFailed and excepption is ${exception.message}');
-          loginBloc.add(VerifyPhoneNumberFailureEvent(message: exception.message));
+          loginBloc
+              .add(VerifyPhoneNumberFailureEvent(message: exception.message));
         },
         codeSent: (String verId, [int forceResendingToken]) {
           print('in codeSend');
           verificationId = verId;
         },
         codeAutoRetrievalTimeout: null);
+  }
+
+  void saveUser(User user) {
+    print('here in save to firestore DB');
+
+
+    print('user new games is ${user.newGames}');
+    //Save user to firestore DB.
+    _firestore.collection('users').document(user.phoneNumber).setData({
+      'phoneNumber': user.phoneNumber,
+      'active': user.active,
+      'newGames': user.newGames,
+    });
+  }
+
+//  getUser(String phoneNumber) async {
+//    return await _firestore
+//        .collection('users')
+//        .where("phoneNumber", isEqualTo: phoneNumber)
+//        .getDocuments()
+//        .then((event) {
+//      if (event.documents.isNotEmpty) {
+//        print('im here in emepty');
+//        Map<String, dynamic> documentData =
+//            event.documents.single.data; //if it is a single document
+//        return documentData[phoneNumber];
+//      } else {
+//        return null;
+//      }
+//    }).catchError((e) => print("error fetching data: $e"));
+//  }
+
+  Future<QuerySnapshot> getAllUsers() async {
+    return await _firestore.collection('users').getDocuments();
   }
 
   Future<void> signOut() async {
