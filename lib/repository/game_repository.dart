@@ -33,7 +33,10 @@ class GameRepository {
     String downloadImageUrl =
         await saveImageFileToStorage(imageFile, senderPhoneNumber);
 
-    user.newGames[senderPhoneNumber] = downloadImageUrl;
+    user.newGames['sender'] = senderPhoneNumber;
+    user.newGames['image'] = downloadImageUrl;
+    user.newGames['totalTime'] = totalTime;
+    user.newGames['numOfPieces'] = numOfPieces;
 
     userRepository.saveUser(user);
   }

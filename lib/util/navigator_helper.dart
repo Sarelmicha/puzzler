@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:puzzlechat/ui/screens/edit_image_screen.dart';
+import 'package:puzzlechat/ui/screens/game_screen.dart';
 import 'package:puzzlechat/ui/screens/pick_image_screen.dart';
 import 'package:puzzlechat/ui/screens/lobby_screen.dart';
 import 'package:puzzlechat/ui/screens/login_screen.dart';
@@ -50,6 +51,14 @@ class NavigatorHelper {
   static void navigateBackToPreviousScreen(BuildContext context) {
     Navigator.pop(context);
   }
+
+  static void navigateToGameScreenScreen(BuildContext context,File imageFile,int numOfRows) {
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+      return GameScreenParent(imageFile: imageFile,numOfRows: numOfRows );
+    }));
+  }
+
+
 
 
   
