@@ -25,7 +25,7 @@ class ImagePieceWidget extends StatelessWidget {
       ),
 
       width: 120,
-      height: 120,
+      height: 150,
       child: imagePiece.image,
     );
   }

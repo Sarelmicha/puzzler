@@ -24,29 +24,29 @@
 //    _controller.sink.add(_cells);
 //  }
 //
-//  void fillCell(int index){
-//
-//    for(Cell cell in _cells){
-//      if(cell.index == index){
-//        cell.isFilled = true;
-//        break;
-//      }
-//    }
-//  }
-//
-//  @override
-//  void dispose() {
-//    _controller.close();
-//  }
-//
-//  bool isWin(){
-//
-//    for(Cell cell in _cells){
-//      if(!cell.isFilled){
-//        return false;
-//      }
-//    }
-//    return true;
-//
-//  }
+////  void fillCell(int index){
+////
+////    for(Cell cell in _cells){
+////      if(cell.index == index){
+////        cell.isFilled = true;
+////        break;
+////      }
+////    }
+////  }
+////
+////  @override
+////  void dispose() {
+////    _controller.close();
+////  }
+////
+////  bool isWin(){
+////
+////    for(Cell cell in _cells){
+////      if(!cell.isFilled){
+////        return false;
+////      }
+////    }
+////    return true;
+////
+////  }
 //}

@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:typed_data';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:puzzlechat/bloc/edit_image_screen_bloc/edit_image_screen_event.dart';
@@ -90,6 +89,7 @@ class EditImageScreenBloc
           event.totalTime,
           event.numOfPieces,
           event.senderPhoneNumber);
+
       yield SendImageSuccessState();
 
     } else if (event is ParameterChangedEvent) {
@@ -143,10 +143,5 @@ class EditImageScreenBloc
     }
 
     return filters;
-  }
-
-  Uint8List convertImageToByteData(File imageFile) {
-    var byteData = imageFile.readAsBytesSync();
-    return byteData;
   }
 }
