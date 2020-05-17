@@ -3,6 +3,7 @@ import 'dart:collection';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:puzzlechat/bloc/login_bloc/login_event.dart';
 import 'package:puzzlechat/bloc/login_bloc/login_state.dart';
+import 'package:puzzlechat/data/game_data.dart';
 import 'package:puzzlechat/data/user.dart';
 import 'package:puzzlechat/repository/user_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -30,9 +31,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     } else if (event is VerifyPhoneNumberSuccessEvent) {
       print('user after loginUser func is ${event.user}');
       if (event.user != null) {
+
 //        //Only for Tests
         print('before save user!');
-        userRepository.saveUser(User(phoneNumber: event.user.phoneNumber,newGames: HashMap<String,Object>(),active: true));
+        userRepository.saveUser(User(phoneNumber: event.user.phoneNumber,games: HashMap<String,List<GameData>>(),active: true));
         yield LoginSuccessState(user: event.user);
       } else {
         yield CodeState(verificationId: event.verificationId);

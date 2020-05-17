@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:puzzlechat/data/game_data.dart';
 
 abstract class AppBarState extends Equatable{}
 
@@ -26,6 +27,13 @@ class ShowSettingsSuccess extends AppBarState {
 }
 
 class ShowNotificationSuccess extends AppBarState {
+  ShowNotificationSuccess(List<GameData> cardsData);
+
+  
+  
+  
+  
+
 
   @override
   // TODO: implement props

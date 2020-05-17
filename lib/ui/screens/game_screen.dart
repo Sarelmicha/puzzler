@@ -82,7 +82,8 @@ class _GameScreenState extends State<GameScreen> {
                     gradient: LinearGradient(
                         begin: Alignment.topRight,
                         end: Alignment.bottomLeft,
-                        colors: [Colors.pink, Colors.pinkAccent])),
+                        colors: [Colors.pink, Colors.pinkAccent])
+                ),
                 width: double.infinity,
                 height: 100.0,
                 padding: EdgeInsets.all(5.0),

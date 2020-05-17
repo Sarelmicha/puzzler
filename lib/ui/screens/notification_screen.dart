@@ -8,37 +8,39 @@ import 'package:puzzlechat/bloc/app_bar_bloc/app_bar_state.dart';
 import 'package:puzzlechat/bloc/lobby_screen_bloc/lobby_screen_bloc.dart';
 import 'package:puzzlechat/bloc/lobby_screen_bloc/lobby_screen_event.dart';
 import 'package:puzzlechat/bloc/lobby_screen_bloc/lobby_screen_state.dart';
+import 'package:puzzlechat/bloc/notification_bloc/notification_bloc.dart';
+import 'package:puzzlechat/ui/widgets/card_list.dart';
 import 'package:puzzlechat/ui/widgets/contact_list.dart';
 import 'package:puzzlechat/util/navigator_helper.dart';
 import 'package:puzzlechat/util/contstants.dart';
 
-class LobbyScreenParent extends StatelessWidget {
+class NotificationScreenParent extends StatelessWidget {
 
   final FirebaseUser currentUser;
 
-  LobbyScreenParent({@required this.currentUser});
+  NotificationScreenParent({@required this.currentUser});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<AppBarBloc>(
       create: (context) => AppBarBloc(currentUser),
-      child: BlocProvider<LobbyScreenBloc>(
-          create: (context) => LobbyScreenBloc(currentUser)..add(EnterLobbyEvent()),
-          child: LobbyScreen(currentUser: currentUser)),
+      child: BlocProvider<NotificationBloc>(
+          create: (context) => NotificationBloc(),
+          child: NotificationScreen(currentUser: currentUser)),
     );
   }
 }
 
-class LobbyScreen extends StatefulWidget {
+class NotificationScreen extends StatefulWidget {
 
   final FirebaseUser currentUser;
-  LobbyScreen({this.currentUser});
+  NotificationScreen({this.currentUser});
 
   @override
-  _LobbyScreenState createState() => _LobbyScreenState();
+  _NotificationScreenState createState() => _NotificationScreenState();
 }
 
-class _LobbyScreenState extends State<LobbyScreen> {
+class _NotificationScreenState extends State<NotificationScreen> {
 
   LobbyScreenBloc lobbyScreenBloc;
   AppBarBloc appBarBloc;
@@ -56,7 +58,7 @@ class _LobbyScreenState extends State<LobbyScreen> {
           title:  Text(
             'Puzzler',
             style: kLogoTextStyle.copyWith(
-              fontSize: 30.0
+                fontSize: 30.0
             ),
           ),
           backgroundColor: Colors.purpleAccent,
@@ -67,7 +69,6 @@ class _LobbyScreenState extends State<LobbyScreen> {
                 color: Colors.white,
               ),
               onPressed: () {
-                appBarBloc.add(NotificationButtonHasBeenPressed());
                 // do something
               },
             ),
@@ -108,7 +109,6 @@ class _LobbyScreenState extends State<LobbyScreen> {
                   //TODO - Navigate to Settings page.
                 } else if(appBarState is ShowNotificationSuccess){
                   //TODO - Navigate to Notification page.
-                  NavigatorHelper.navigateToGameNotificationScreen(context);
                 }
               },
               child: BlocListener<LobbyScreenBloc, LobbyScreenState>(
@@ -119,12 +119,15 @@ class _LobbyScreenState extends State<LobbyScreen> {
                     NavigatorHelper.navigateBackToPreviousScreen(context);
                   }
                 },
-                child: Center(child: ContactList(currentUser : widget.currentUser)),
+                child: Center(
+                  child: CardList(),
+                ),
               ),
             ),
           ),
         ));
   }
+
 
   @override
   void dispose() {

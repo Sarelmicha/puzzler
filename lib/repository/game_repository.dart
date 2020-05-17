@@ -1,44 +1,102 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:puzzlechat/data/user.dart';
-import 'package:puzzlechat/repository/user_repository.dart';
+import 'package:puzzlechat/data/game_data.dart';
 import 'package:puzzlechat/util/converter.dart';
 
 class GameRepository {
   FirebaseStorage _fireStorage;
   Firestore _firestore;
-  Converter converter;
-  UserRepository userRepository;
 
   GameRepository() {
     this._fireStorage = FirebaseStorage.instance;
     this._firestore = Firestore.instance;
-    userRepository = UserRepository();
-    this.converter = Converter();
   }
 
-  void sendGame(String receiverPhoneNumber, File imageFile, int totalTime,
+  Future<void> sendPuzzleGame(String receiverPhoneNumber, File imageFile, int totalTime,
       int numOfPieces, String senderPhoneNumber) async {
-    var document = await _firestore
+
+
+    //Fetching the image URL from the fireStorage
+    String downloadImageUrl =
+        await saveImageFileToStorage(imageFile, senderPhoneNumber);
+
+    //Creating new game data.
+    GameData gameData = GameData(
+        sender: senderPhoneNumber,
+        totalTime: totalTime.toString(),
+        numOfRows: numOfPieces.toString(),
+        imageUrl: downloadImageUrl);
+
+    //Fetch from DB the document of the current receiver user
+    DocumentSnapshot documentSnapshot = await _firestore
         .collection('users')
         .document(receiverPhoneNumber)
         .get();
 
-    User user = User(
-        phoneNumber: document.data['phoneNumber'],
-        newGames: document.data['newGames'],
-        active: true);
+    print('here before getch');
+    //Fetch the games Map from the receiver user
+    print('doucument snap shot active  is ${documentSnapshot.data["active"].runtimeType}');
+    print('doucument snap shot is ${documentSnapshot.data["games"].runtimeType}');
 
-    String downloadImageUrl =
-        await saveImageFileToStorage(imageFile, senderPhoneNumber);
+    Map<String, dynamic> games = documentSnapshot.data['games'];
 
-    user.newGames['sender'] = senderPhoneNumber;
-    user.newGames['image'] = downloadImageUrl;
-    user.newGames['totalTime'] = totalTime;
-    user.newGames['numOfPieces'] = numOfPieces;
+    print('games is before  add $games');
 
-    userRepository.saveUser(user);
+    print('here after getch');
+
+    //Fetch the List of open games from the receiver user
+    List<GameData> openGamesWithSender;
+    if(games[senderPhoneNumber] != null) {
+       openGamesWithSender = Converter.fromSaveableList(
+          games[senderPhoneNumber]);
+    } else {
+      openGamesWithSender = List();
+    }
+
+    print('openGameWithSender is ${openGamesWithSender.runtimeType}');
+
+    //Adding another game to open game of with sender.
+    if(openGamesWithSender == null) {
+      openGamesWithSender = List();
+    }
+
+    print('openGameWithSender is ${openGamesWithSender.runtimeType}');
+
+    openGamesWithSender.add(gameData);
+
+    print('here before update the map');
+
+    //Update the map before update in DB
+    games[senderPhoneNumber] = openGamesWithSender;
+
+
+   print('games now is  ${games}');
+
+    print('here before update the map');
+
+    print('receiver phone number $receiverPhoneNumber');
+
+
+    print('okay... lets go!');
+
+    print('games issss $games');
+
+    Map<String,dynamic> mapToSave = Converter.toSaveableMap(games);
+
+
+    print('after conversion!!!!!');
+    //Update in database
+    await _firestore
+        .collection("users")
+        .document(receiverPhoneNumber)
+        .updateData(
+      {
+        'games' : mapToSave,
+      }
+    );
+
+    print('done update.');
   }
 
   Future<String> saveImageFileToStorage(
