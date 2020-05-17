@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:puzzlechat/bloc/login_bloc/login_bloc.dart';
 import 'package:puzzlechat/bloc/login_bloc/login_event.dart';
 import 'package:puzzlechat/data/user.dart';
+import 'package:puzzlechat/util/converter.dart';
 
 class UserRepository {
   FirebaseAuth _firebaseAuth;
@@ -32,8 +33,8 @@ class UserRepository {
     return result.user;
   }
 
-  Future<FirebaseUser> signInWithCredential(
-      String verificationId, String code) async {
+  Future<FirebaseUser> signInWithCredential(String verificationId,
+      String code) async {
     print('im here in signInWithCredential');
 
     AuthCredential credential = PhoneAuthProvider.getCredential(
@@ -62,7 +63,7 @@ class UserRepository {
           print('in verificationCompleted ');
 
           AuthResult result =
-              await _firebaseAuth.signInWithCredential(credential);
+          await _firebaseAuth.signInWithCredential(credential);
 
           //Insert to the empty user that sent from bloc the current user
           user = result.user;
@@ -85,38 +86,24 @@ class UserRepository {
         codeAutoRetrievalTimeout: null);
   }
 
-  void saveUser(User user) {
+  void saveUser(User user) async {
     print('here in save to firestore DB');
+    print('user new games is ${user.games}');
 
-
-    print('user new games is ${user.newGames}');
     //Save user to firestore DB.
-    _firestore.collection('users').document(user.phoneNumber).setData({
+    await _firestore.collection('users').document(user.phoneNumber).setData({
       'phoneNumber': user.phoneNumber,
       'active': user.active,
-      'newGames': user.newGames,
+      'games': Converter.toSaveableMap(user.games),
     });
   }
 
-//  getUser(String phoneNumber) async {
-//    return await _firestore
-//        .collection('users')
-//        .where("phoneNumber", isEqualTo: phoneNumber)
-//        .getDocuments()
-//        .then((event) {
-//      if (event.documents.isNotEmpty) {
-//        print('im here in emepty');
-//        Map<String, dynamic> documentData =
-//            event.documents.single.data; //if it is a single document
-//        return documentData[phoneNumber];
-//      } else {
-//        return null;
-//      }
-//    }).catchError((e) => print("error fetching data: $e"));
-//  }
-
   Future<QuerySnapshot> getAllUsers() async {
     return await _firestore.collection('users').getDocuments();
+  }
+
+  Future<DocumentSnapshot> getSpecificUser(String phoneNumber) async {
+    return await _firestore.collection('users').document(phoneNumber).get();
   }
 
   Future<void> signOut() async {
@@ -132,3 +119,4 @@ class UserRepository {
     return await _firebaseAuth.currentUser();
   }
 }
+

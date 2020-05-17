@@ -42,7 +42,7 @@ class EditImageScreenParent extends StatelessWidget {
       child: BlocProvider(
         create: (context) => ImageBloc(imageFile: imageFile),
         child: BlocProvider<AppBarBloc>(
-          create: (context) => AppBarBloc(),
+          create: (context) => AppBarBloc(currentUser),
           child: EditImageScreen(
               imageFile: imageFile,
               receiverPhoneNumber: receiverPhoneNumber,

@@ -79,11 +79,11 @@ class EditImageScreenBloc
         currentPiecesIndex = pieces.length;
       }
       yield ChangePiecesSuccessState(numOfPieces: pieces[--currentPiecesIndex]);
-    } else if (event is SendButtonHasBeenPressed) {
+    } else if (event is SendButtonHasBeenPressed)  {
 
       print('sender phone number is ${event.senderPhoneNumber}');
 
-      _gameRepository.sendGame(
+      await _gameRepository.sendPuzzleGame(
           event.receiverPhoneNumber,
           imageFile,
           event.totalTime,
