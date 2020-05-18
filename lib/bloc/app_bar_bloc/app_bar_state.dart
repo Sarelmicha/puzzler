@@ -27,13 +27,10 @@ class ShowSettingsSuccess extends AppBarState {
 }
 
 class ShowNotificationSuccess extends AppBarState {
-  ShowNotificationSuccess(List<GameData> cardsData);
 
-  
-  
-  
-  
+  final List<GameData> cardsData;
 
+  ShowNotificationSuccess({this.cardsData});
 
   @override
   // TODO: implement props

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:puzzlechat/data/game_data.dart';
 import 'package:puzzlechat/ui/screens/edit_image_screen.dart';
 import 'package:puzzlechat/ui/screens/game_screen.dart';
 import 'package:puzzlechat/ui/screens/notification_screen.dart';
@@ -59,9 +60,9 @@ class NavigatorHelper {
     }));
   }
 
-  static void navigateToGameNotificationScreen(BuildContext context) {
+  static void navigateToGameNotificationScreen(BuildContext context, List<GameData> cardsData,FirebaseUser currentUser) {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-      return NotificationScreenParent();
+      return NotificationScreenParent(cardsData: cardsData,currentUser: currentUser);
     }));
   }
 

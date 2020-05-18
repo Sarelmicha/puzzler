@@ -9,13 +9,12 @@ class NotificationInitialState extends NotificationState {
 
 }
 
-class NotificationScreenReady extends NotificationState {
-
-  final List<GameData> cardsData;
-
-  NotificationScreenReady({this.cardsData});
-
+class GameStartedState extends NotificationState {
   @override
   List<Object> get props => null;
 
 }
+
+
+
+

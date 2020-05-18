@@ -3,18 +3,21 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:puzzlechat/data/game_data.dart';
 import 'package:puzzlechat/util/converter.dart';
+import 'package:uuid/uuid.dart';
 
 class GameRepository {
   FirebaseStorage _fireStorage;
   Firestore _firestore;
+  Uuid uuid;
 
   GameRepository() {
     this._fireStorage = FirebaseStorage.instance;
     this._firestore = Firestore.instance;
+    this.uuid = Uuid();
   }
 
   Future<void> sendPuzzleGame(String receiverPhoneNumber, File imageFile, int totalTime,
-      int numOfPieces, String senderPhoneNumber) async {
+      int numOfRows, String senderPhoneNumber) async {
 
 
     //Fetching the image URL from the fireStorage
@@ -23,9 +26,10 @@ class GameRepository {
 
     //Creating new game data.
     GameData gameData = GameData(
+        gameId: uuid.v1(),
         sender: senderPhoneNumber,
         totalTime: totalTime.toString(),
-        numOfRows: numOfPieces.toString(),
+        numOfRows: numOfRows.toString(),
         imageUrl: downloadImageUrl);
 
     //Fetch from DB the document of the current receiver user
@@ -36,7 +40,6 @@ class GameRepository {
 
     print('here before getch');
     //Fetch the games Map from the receiver user
-    print('doucument snap shot active  is ${documentSnapshot.data["active"].runtimeType}');
     print('doucument snap shot is ${documentSnapshot.data["games"].runtimeType}');
 
     Map<String, dynamic> games = documentSnapshot.data['games'];
@@ -115,5 +118,30 @@ class GameRepository {
     String url = await taskSnapshot.ref.getDownloadURL();
 
     return url;
+  }
+
+  void deleteGame(String receiverPhoneNumber,String senderPhoneNumber, String gameId) async{
+
+   DocumentSnapshot documentSnapshot = await _firestore.collection('users').document(receiverPhoneNumber).get();
+
+   List<GameData> games = documentSnapshot.data['games'][senderPhoneNumber];
+
+   //Remove the played game
+   games.forEach((element) {
+
+     if(element.gameId == gameId){
+       games.remove(element);
+     }
+   });
+
+   //Update in database
+   await _firestore
+       .collection("users")
+       .document(receiverPhoneNumber)
+       .updateData(
+       {
+         'games.$senderPhoneNumber' : games,
+       }
+   );
   }
 }

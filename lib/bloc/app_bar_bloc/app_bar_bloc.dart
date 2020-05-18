@@ -6,6 +6,7 @@ import 'package:puzzlechat/bloc/app_bar_bloc/app_bar_event.dart';
 import 'package:puzzlechat/bloc/app_bar_bloc/app_bar_state.dart';
 import 'package:puzzlechat/data/game_data.dart';
 import 'package:puzzlechat/repository/user_repository.dart';
+import 'package:puzzlechat/util/converter.dart';
 
 class AppBarBloc extends Bloc<AppBarEvent,AppBarState> {
 
@@ -30,16 +31,32 @@ class AppBarBloc extends Bloc<AppBarEvent,AppBarState> {
        yield ShowSettingsSuccess();
      } else if(event is NotificationButtonHasBeenPressed){
 
+       print('Notification button has been pressed!');
        DocumentSnapshot snapshot = await userRepository.getSpecificUser(currentUser.phoneNumber);
-       List<GameData> cardsData = getGamesData(snapshot.data);
-       //TODO - get all notification from Firebase
-       yield ShowNotificationSuccess(cardsData);
+       print('snapshot data is ${snapshot.data['games'].runtimeType}');
+       List<GameData> cardsData = getGamesData(snapshot.data['games']);
+       print('here 2');
+       yield ShowNotificationSuccess(cardsData : cardsData);
      }
   }
 
-  List<GameData> getGamesData(Map<String, Object> data) {
+  List<GameData> getGamesData(Map <String, dynamic> fromSaveableMap) {
+
+    print('inside getGameData');
+    List<GameData> allGames = List();
+
+    fromSaveableMap.forEach((key, value) {
+      print('value is ${value.runtimeType}');
+      Converter.fromSaveableList(value).forEach((element) {
+        print('hereeeee');
+        allGames.add(element);
+      });
+    });
 
 
+    print('finish getGamesData and allGames length is ${allGames.length}');
+
+    return allGames;
 
   }
 }

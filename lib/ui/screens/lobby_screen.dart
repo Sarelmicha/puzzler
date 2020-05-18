@@ -107,8 +107,7 @@ class _LobbyScreenState extends State<LobbyScreen> {
                 } else if(appBarState is ShowSettingsSuccess){
                   //TODO - Navigate to Settings page.
                 } else if(appBarState is ShowNotificationSuccess){
-                  //TODO - Navigate to Notification page.
-                  NavigatorHelper.navigateToGameNotificationScreen(context);
+                  NavigatorHelper.navigateToGameNotificationScreen(context,appBarState.cardsData,widget.currentUser);
                 }
               },
               child: BlocListener<LobbyScreenBloc, LobbyScreenState>(

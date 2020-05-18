@@ -39,21 +39,21 @@ class LobbyScreenBloc extends Bloc<LobbyScreenEvent, LobbyScreenState> {
 
         print('here 2');
 
-        List<Contact> phoneContactList = contacts.toList();
+        List<Contact> phoneContactsList = contacts.toList();
 
         //--------------- for print for tests--------------
-        for (int i = 0; i < phoneContactList.length; i++) {
-          print(phoneContactList[i].displayName);
+        for (int i = 0; i < phoneContactsList.length; i++) {
+          print(phoneContactsList[i].displayName);
         }
         //---------------------------------------
 
-        List<myContact.Contact> allContactWithApp = await
-            getAllContactWithApp(phoneContactList);
+        List<myContact.Contact> appContacts = await
+            getAllContactWithApp(phoneContactsList);
 
-        print(allContactWithApp);
+        print(appContacts);
 
         //List<Contact> contacts = await getContacts();
-        yield LobbyScreenReady(contacts: allContactWithApp);
+        yield LobbyScreenReady(contacts: appContacts);
       } catch (e) {
         if (Platform.isAndroid) {
           yield LobbyScreenFailure(message: e.message);

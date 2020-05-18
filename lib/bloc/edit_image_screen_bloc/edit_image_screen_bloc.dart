@@ -83,11 +83,13 @@ class EditImageScreenBloc
 
       print('sender phone number is ${event.senderPhoneNumber}');
 
+     int convertedNumOfRows = convertFromPiecesToNumOfRows(event.numOfPieces);
+
       await _gameRepository.sendPuzzleGame(
           event.receiverPhoneNumber,
           imageFile,
           event.totalTime,
-          event.numOfPieces,
+          convertedNumOfRows,
           event.senderPhoneNumber);
 
       yield SendImageSuccessState();
@@ -143,5 +145,28 @@ class EditImageScreenBloc
     }
 
     return filters;
+  }
+
+  int convertFromPiecesToNumOfRows(int numOfPieces){
+
+    int numOfRows;
+
+    switch(numOfPieces){
+
+      case 9:
+        numOfRows = 3;
+        break;
+      case 16:
+        numOfRows = 4;
+        break;
+      case 25:
+        numOfRows = 5;
+        break;
+      case 36:
+        numOfRows = 6;
+        break;
+    }
+
+    return numOfRows;
   }
 }
