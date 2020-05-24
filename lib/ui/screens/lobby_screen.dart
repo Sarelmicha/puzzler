@@ -8,6 +8,7 @@ import 'package:puzzlechat/bloc/app_bar_bloc/app_bar_state.dart';
 import 'package:puzzlechat/bloc/lobby_screen_bloc/lobby_screen_bloc.dart';
 import 'package:puzzlechat/bloc/lobby_screen_bloc/lobby_screen_event.dart';
 import 'package:puzzlechat/bloc/lobby_screen_bloc/lobby_screen_state.dart';
+import 'package:puzzlechat/data/contact.dart';
 import 'package:puzzlechat/ui/widgets/contact_list.dart';
 import 'package:puzzlechat/util/navigator_helper.dart';
 import 'package:puzzlechat/util/contstants.dart';
@@ -32,6 +33,7 @@ class LobbyScreenParent extends StatelessWidget {
 class LobbyScreen extends StatefulWidget {
 
   final FirebaseUser currentUser;
+
   LobbyScreen({this.currentUser});
 
   @override
@@ -42,6 +44,7 @@ class _LobbyScreenState extends State<LobbyScreen> {
 
   LobbyScreenBloc lobbyScreenBloc;
   AppBarBloc appBarBloc;
+  List<Contact> userContacts;
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +70,7 @@ class _LobbyScreenState extends State<LobbyScreen> {
                 color: Colors.white,
               ),
               onPressed: () {
-                appBarBloc.add(NotificationButtonHasBeenPressed());
+                appBarBloc.add(NotificationButtonHasBeenPressed(userContacts: userContacts));
                 // do something
               },
             ),
@@ -103,12 +106,14 @@ class _LobbyScreenState extends State<LobbyScreen> {
             child: BlocListener<AppBarBloc,AppBarState>(
               listener: (context, appBarState) {
                 if(appBarState is LogOutSuccess){
+                  appBarBloc.add(PressedOnIconFinished());
                   NavigatorHelper.navigateToLoginScreen(context);
                 } else if(appBarState is ShowSettingsSuccess){
                   //TODO - Navigate to Settings page.
+                  appBarBloc.add(PressedOnIconFinished());
                 } else if(appBarState is ShowNotificationSuccess){
-                  //TODO - Navigate to Notification page.
-                  NavigatorHelper.navigateToGameNotificationScreen(context);
+                  appBarBloc.add(PressedOnIconFinished());
+                  NavigatorHelper.navigateToGameNotificationScreen(context,appBarState.cardsData,widget.currentUser);
                 }
               },
               child: BlocListener<LobbyScreenBloc, LobbyScreenState>(
@@ -116,6 +121,7 @@ class _LobbyScreenState extends State<LobbyScreen> {
                   if (lobbyScreenState is LobbyScreenLoading) {
                     NavigatorHelper.navigateToSplashScreen(context);
                   } else if (lobbyScreenState is LobbyScreenReady) {
+                    userContacts = lobbyScreenState.contacts;
                     NavigatorHelper.navigateBackToPreviousScreen(context);
                   }
                 },

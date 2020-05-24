@@ -8,10 +8,11 @@ import 'package:puzzlechat/ui/widgets/card_widget.dart';
 
 class CardList extends StatelessWidget {
 
-  final FirebaseUser currentUser;
   final List<GameData> cardsData;
+  final NotificationBloc notificationBloc;
+  final FirebaseUser currentUser;
 
-  CardList({this.currentUser,this.cardsData});
+  CardList({this.cardsData, this.notificationBloc,this.currentUser});
 
   @override
   Widget build(BuildContext context) {
@@ -20,22 +21,15 @@ class CardList extends StatelessWidget {
 
       //Fetch new data while we are in the notification screen.
       builder: (context, state) {
-        if (state is NotificationScreenReady) {
-          return ListView.builder(
-            itemBuilder: (context, index) {
-              return CardWidget(
-                cardData: state.cardsData[index],
-              );
-            },
-            itemCount: state.cardsData.length,
-          );
-        }
-
+        print('state is $state');
         //Fetching new data when entering the notificaion screen.
         return ListView.builder(
           itemBuilder: (context, index) {
+            print('im sender yooooo ${cardsData[index].sender}');
             return CardWidget(
               cardData: cardsData[index],
+              notificationBloc: notificationBloc,
+              currentUser: currentUser,
             );
           },
           itemCount: cardsData.length,

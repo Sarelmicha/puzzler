@@ -1,36 +1,46 @@
 import 'dart:io';
+import 'dart:typed_data';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:puzzlechat/bloc/game_bloc/game_bloc.dart';
 import 'package:puzzlechat/bloc/game_bloc/game_event.dart';
 import 'package:puzzlechat/bloc/game_bloc/game_state.dart';
+import 'package:puzzlechat/bloc/lobby_screen_bloc/lobby_screen_state.dart';
 import 'package:puzzlechat/data/cell.dart';
 import 'package:puzzlechat/data/image_piece.dart';
 import 'package:puzzlechat/ui/widgets/cell_widget.dart';
 import 'package:puzzlechat/ui/widgets/image_piece_widget.dart';
+import 'package:puzzlechat/ui/widgets/timer_widget.dart';
 import 'package:puzzlechat/util/navigator_helper.dart';
 
 class GameScreenParent extends StatelessWidget {
+  final FirebaseUser currentUser;
+  final int totalTime;
   final int numOfRows;
-  final File imageFile;
+  final Uint8List image;
 
-  GameScreenParent({this.numOfRows, this.imageFile});
+  GameScreenParent(
+      {this.totalTime, this.numOfRows, this.image, this.currentUser});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<GameBloc>(
-      create: (context) => GameBloc(imageFile: imageFile, numOfRows: numOfRows)
-        ..add(GameStartedEvent()),
-      child: GameScreen(numOfRows: numOfRows),
+      create: (context) =>
+          GameBloc(image: image, numOfRows: numOfRows)..add(GameStartedEvent()),
+      child: GameScreen(
+          totalTime: totalTime, numOfRows: numOfRows, currentUser: currentUser),
     );
   }
 }
 
 class GameScreen extends StatefulWidget {
+  final int totalTime;
   final int numOfRows;
+  final FirebaseUser currentUser;
 
-  GameScreen({this.numOfRows});
+  GameScreen({this.totalTime, this.numOfRows, this.currentUser});
 
   @override
   _GameScreenState createState() => _GameScreenState();
@@ -42,7 +52,7 @@ class _GameScreenState extends State<GameScreen> {
   bool orderImagesHasSet = false;
   int startTime;
   String imageUrl;
-  //  Timer timer;
+  bool isUserCanPlay;
 
   @override
   Widget build(BuildContext context) {
@@ -82,12 +92,13 @@ class _GameScreenState extends State<GameScreen> {
                     gradient: LinearGradient(
                         begin: Alignment.topRight,
                         end: Alignment.bottomLeft,
-                        colors: [Colors.pink, Colors.pinkAccent])
-                ),
+                        colors: [Colors.pink, Colors.pinkAccent])),
                 width: double.infinity,
                 height: 100.0,
                 padding: EdgeInsets.all(5.0),
                 child: Align(
+                  child: TimerWidget(
+                      totalTime: widget.totalTime, gameBloc: gameBloc),
                   alignment: Alignment.center,
                 ),
               ),
@@ -101,6 +112,13 @@ class _GameScreenState extends State<GameScreen> {
                   NavigatorHelper.navigateToSplashScreen(context);
                 } else if (state is GameReadyState) {
                   NavigatorHelper.navigateBackToPreviousScreen(context);
+                  gameBloc.add(GameIsReadyEvent());
+                }  else if (state is GameOverState) {
+                  if (state.isUserWon) {
+                    userWon();
+                  } else {
+                    userLost();
+                  }
                 }
                 return Container();
               },
@@ -125,7 +143,7 @@ class _GameScreenState extends State<GameScreen> {
                     ],
                   );
                 } else if (state is ContinueGameState) {
-
+                  orderImagePieces = gameBloc.orderImagePieces;
                   return Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
@@ -141,6 +159,30 @@ class _GameScreenState extends State<GameScreen> {
                           context, widget.numOfRows, state.imagePieces),
                     ],
                   );
+                } else if (state is CantPlayState) {
+                  print('im here and user CANT play');
+                  return Container();
+
+                } else if (state is CanPlayState) {
+
+                  orderImagePieces = gameBloc.orderImagePieces;
+
+                 return Column(
+                   mainAxisSize: MainAxisSize.min,
+                   children: <Widget>[
+                     _buildBoard(
+                       context,
+                       widget.numOfRows,
+                       state.cells,
+                     ),
+                     SizedBox(
+                       height: 20.0,
+                     ),
+                     _buildImagePieceContainer(
+                         context, widget.numOfRows, state.imagePieces),
+                   ],
+                 );
+
                 }
                 return Container();
               }),
@@ -198,9 +240,7 @@ class _GameScreenState extends State<GameScreen> {
     );
   }
 
-  DragTarget _buildDragTarget(
-    int index,
-  ) {
+  DragTarget _buildDragTarget(int index) {
     return DragTarget<int>(
       builder: (BuildContext context, List<int> incoming, List rejected) {
         if (gameBloc.cells[index].isFilled) {
@@ -216,8 +256,11 @@ class _GameScreenState extends State<GameScreen> {
           );
         }
       },
-      onWillAccept: (imagePieceIndex) =>
-          imagePieceIndex == gameBloc.cells[index].index,
+      onWillAccept: (imagePieceIndex) {
+        print(
+            'imagePieceIndex is $imagePieceIndex and cell index is ${gameBloc.cells[index].index}');
+        return imagePieceIndex == gameBloc.cells[index].index;
+      },
       onAccept: (imagePieceIndex) {
         gameBloc.add(CellHasBeenFieldEvent(index: imagePieceIndex));
       },
@@ -226,50 +269,52 @@ class _GameScreenState extends State<GameScreen> {
 
   Widget _buildImagePieceContainer(
       BuildContext context, int numOfRows, List<ImagePiece> imagePieces) {
-    return Flexible(
-      child: Container(
-        decoration: BoxDecoration(
-            boxShadow: [
-              BoxShadow(
-                color: Colors.purple,
-                blurRadius: 20.0, // has the effect of softening the shadow
-                spreadRadius: 5.0, // has the effect of extending the shadow
-                offset: Offset(
-                  10.0, // horizontal, move right 10
-                  10.0, // vertical, move down 10
-                ),
-              )
+    print('build me baby!!!');
+      print('here and user cannnn play!');
+      return Flexible(
+        child: Container(
+          decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.purple,
+                  blurRadius: 20.0, // has the effect of softening the shadow
+                  spreadRadius: 5.0, // has the effect of extending the shadow
+                  offset: Offset(
+                    10.0, // horizontal, move right 10
+                    10.0, // vertical, move down 10
+                  ),
+                )
+              ],
+              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+              gradient: LinearGradient(
+                  begin: Alignment.topRight,
+                  end: Alignment.bottomLeft,
+                  colors: [Colors.pink, Colors.pinkAccent])),
+          width: double.infinity,
+          height: 130.0,
+          padding: EdgeInsets.all(5.0),
+          child: Row(
+            children: <Widget>[
+              Icon(
+                Icons.chevron_left,
+                color: Colors.white,
+                size: 30,
+              ),
+              Container(
+                  padding: EdgeInsets.all(20.0),
+                  width: 250.0,
+                  height: 200.0,
+                  margin: EdgeInsets.symmetric(horizontal: 20.0),
+                  child: _buildImagePieces(imagePieces, numOfRows)),
+              Icon(
+                Icons.chevron_right,
+                color: Colors.white,
+                size: 30,
+              ),
             ],
-            borderRadius: BorderRadius.all(Radius.circular(10.0)),
-            gradient: LinearGradient(
-                begin: Alignment.topRight,
-                end: Alignment.bottomLeft,
-                colors: [Colors.pink, Colors.pinkAccent])),
-        width: double.infinity,
-        height: 130.0,
-        padding: EdgeInsets.all(5.0),
-        child: Row(
-          children: <Widget>[
-            Icon(
-              Icons.chevron_left,
-              color: Colors.white,
-              size: 30,
-            ),
-            Container(
-                padding: EdgeInsets.all(20.0),
-                width: 250.0,
-                height: 200.0,
-                margin: EdgeInsets.symmetric(horizontal: 20.0),
-                child: _buildImagePieces(imagePieces, numOfRows)),
-            Icon(
-              Icons.chevron_right,
-              color: Colors.white,
-              size: 30,
-            ),
-          ],
+          ),
         ),
-      ),
-    );
+      );
   }
 
   Widget _buildImagePieces(List<ImagePiece> imagesPieces, int numOfRows) {
@@ -297,5 +342,11 @@ class _GameScreenState extends State<GameScreen> {
         );
       },
     );
+  }
+
+  void userWon() {}
+
+  void userLost() {
+    NavigatorHelper.navigateToLobbyScreen(context, widget.currentUser);
   }
 }

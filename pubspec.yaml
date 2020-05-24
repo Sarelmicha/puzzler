@@ -12,7 +12,7 @@ dependencies:
 
   cupertino_icons: ^0.1.2
   image: ^2.1.11
-  circular_countdown: ^0.1.0
+  argon_buttons_flutter: ^1.0.2
   image_gallery_saver: ^1.2.2
   firebase_auth: ^0.16.0
   equatable: ^1.1.1
@@ -26,6 +26,11 @@ dependencies:
   flutter_country_picker: ^0.1.6
   cloud_firestore: ^0.13.5
   firebase_storage: ^3.1.5
+  uuid: ^2.0.4
+  http: ^0.12.1
+  path_provider: ^1.6.8
+
+
 
 
 dev_dependencies:

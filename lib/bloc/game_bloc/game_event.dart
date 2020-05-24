@@ -10,6 +10,12 @@ class GameStartedEvent extends GameEvent {
 
 }
 
+class GameIsReadyEvent extends GameEvent {
+  @override
+  List<Object> get props => null;
+
+}
+
 class CellHasBeenFieldEvent extends GameEvent {
 
   final int index;
@@ -18,5 +24,18 @@ class CellHasBeenFieldEvent extends GameEvent {
 
   @override
   List<Object> get props => null;
+}
+
+class TimeHasPassedEvent extends GameEvent {
+
+  @override
+  List<Object> get props => null;
+}
+
+class PlayButtonHasBeenPressedEvent extends GameEvent {
+
+  @override
+  List<Object> get props => null;
+
 }
 

@@ -9,16 +9,21 @@ import 'package:puzzlechat/bloc/lobby_screen_bloc/lobby_screen_bloc.dart';
 import 'package:puzzlechat/bloc/lobby_screen_bloc/lobby_screen_event.dart';
 import 'package:puzzlechat/bloc/lobby_screen_bloc/lobby_screen_state.dart';
 import 'package:puzzlechat/bloc/notification_bloc/notification_bloc.dart';
+import 'package:puzzlechat/bloc/notification_bloc/notification_state.dart';
+import 'package:puzzlechat/data/contact.dart';
+import 'package:puzzlechat/data/game_data.dart';
 import 'package:puzzlechat/ui/widgets/card_list.dart';
 import 'package:puzzlechat/ui/widgets/contact_list.dart';
 import 'package:puzzlechat/util/navigator_helper.dart';
 import 'package:puzzlechat/util/contstants.dart';
 
 class NotificationScreenParent extends StatelessWidget {
-
+  final List<GameData> cardsData;
   final FirebaseUser currentUser;
+  final List<Contact> userContacts;
 
-  NotificationScreenParent({@required this.currentUser});
+  NotificationScreenParent(
+      {@required this.cardsData, @required this.currentUser, this.userContacts});
 
   @override
   Widget build(BuildContext context) {
@@ -26,40 +31,37 @@ class NotificationScreenParent extends StatelessWidget {
       create: (context) => AppBarBloc(currentUser),
       child: BlocProvider<NotificationBloc>(
           create: (context) => NotificationBloc(),
-          child: NotificationScreen(currentUser: currentUser)),
+          child: NotificationScreen(
+              cardsData: cardsData, currentUser: currentUser)),
     );
   }
 }
 
 class NotificationScreen extends StatefulWidget {
-
+  final List<GameData> cardsData;
   final FirebaseUser currentUser;
-  NotificationScreen({this.currentUser});
+  NotificationScreen({this.cardsData, this.currentUser});
 
   @override
   _NotificationScreenState createState() => _NotificationScreenState();
 }
 
 class _NotificationScreenState extends State<NotificationScreen> {
-
-  LobbyScreenBloc lobbyScreenBloc;
+  NotificationBloc notificationBloc;
   AppBarBloc appBarBloc;
 
   @override
   Widget build(BuildContext context) {
-
     print('current user from lobby Screen is ${widget.currentUser}');
 
-    lobbyScreenBloc = BlocProvider.of<LobbyScreenBloc>(context);
+    notificationBloc = BlocProvider.of<NotificationBloc>(context);
     appBarBloc = BlocProvider.of<AppBarBloc>(context);
 
     return Scaffold(
         appBar: AppBar(
-          title:  Text(
+          title: Text(
             'Puzzler',
-            style: kLogoTextStyle.copyWith(
-                fontSize: 30.0
-            ),
+            style: kLogoTextStyle.copyWith(fontSize: 30.0),
           ),
           backgroundColor: Colors.purpleAccent,
           actions: <Widget>[
@@ -101,26 +103,37 @@ class _NotificationScreenState extends State<NotificationScreen> {
                     begin: Alignment.topRight,
                     end: Alignment.bottomLeft,
                     colors: [Colors.purpleAccent, Colors.pinkAccent])),
-            child: BlocListener<AppBarBloc,AppBarState>(
+            child: BlocListener<AppBarBloc, AppBarState>(
               listener: (context, appBarState) {
-                if(appBarState is LogOutSuccess){
+                if (appBarState is LogOutSuccess) {
                   NavigatorHelper.navigateToLoginScreen(context);
-                } else if(appBarState is ShowSettingsSuccess){
+                } else if (appBarState is ShowSettingsSuccess) {
                   //TODO - Navigate to Settings page.
-                } else if(appBarState is ShowNotificationSuccess){
+                } else if (appBarState is ShowNotificationSuccess) {
                   //TODO - Navigate to Notification page.
                 }
+                return Container();
               },
-              child: BlocListener<LobbyScreenBloc, LobbyScreenState>(
-                listener: (context, lobbyScreenState) {
-                  if (lobbyScreenState is LobbyScreenLoading) {
+              child: BlocListener<NotificationBloc, NotificationState>(
+                listener: (context, notificationState) {
+                  if (notificationState is GameStartedState) {
+                    NavigatorHelper.navigateToGameScreenScreen(
+                        context,
+                        notificationState.image,
+                        int.parse(notificationState.totalTime),
+                        int.parse(notificationState.numOfRows),
+                        widget.currentUser
+                    );
+                  } else if(notificationState is NotificationWaitingState){
                     NavigatorHelper.navigateToSplashScreen(context);
-                  } else if (lobbyScreenState is LobbyScreenReady) {
-                    NavigatorHelper.navigateBackToPreviousScreen(context);
                   }
                 },
                 child: Center(
-                  child: CardList(),
+                  child: CardList(
+                    cardsData: widget.cardsData,
+                    notificationBloc: notificationBloc,
+                    currentUser: widget.currentUser,
+                  ),
                 ),
               ),
             ),
@@ -128,11 +141,10 @@ class _NotificationScreenState extends State<NotificationScreen> {
         ));
   }
 
-
   @override
   void dispose() {
     super.dispose();
-    lobbyScreenBloc.close();
+    notificationBloc.close();
     appBarBloc.close();
   }
 }

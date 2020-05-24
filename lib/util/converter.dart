@@ -15,6 +15,9 @@ class Converter {
   }
 
   static GameData fromMap(Map<String, dynamic> map){
+
+    print('here in fromMap');
+
     return GameData(
         sender: map['sender'],
         totalTime: map['totalTime'],
@@ -33,7 +36,7 @@ class Converter {
     return convertedGames;
   }
 
-  static List<GameData> fromSaveableList(List <Map<String, dynamic>> games) {
+  static List<GameData> fromSaveableList(List <dynamic> games) {
     List <GameData> convertedGames = [];
     games.forEach((element) {
       convertedGames.add(fromMap(element));
@@ -44,7 +47,6 @@ class Converter {
 
    static Map<String,dynamic> toSaveableMap (Map<String,dynamic> gameMap){
 
-    print('hey ho!');
 
     Map<String,dynamic> convertedMap = HashMap();
 
@@ -58,7 +60,7 @@ class Converter {
 
   }
 
-  static Map<String,List<GameData>> fromSaveableMap (Map<String,dynamic> gameMap) {
+  static Map<String,dynamic> fromSaveableMap (Map<String,dynamic> gameMap) {
 
     Map<String,List<GameData>> convertedMap = HashMap();
 

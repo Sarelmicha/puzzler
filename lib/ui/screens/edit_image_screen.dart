@@ -46,7 +46,8 @@ class EditImageScreenParent extends StatelessWidget {
           child: EditImageScreen(
               imageFile: imageFile,
               receiverPhoneNumber: receiverPhoneNumber,
-              currentUser: currentUser),
+              currentUser: currentUser
+          ),
         ),
       ),
     );
@@ -242,7 +243,6 @@ class _EditImageScreenState extends State<EditImageScreen> {
                   BlocListener<EditImageScreenBloc, EditImageScreenState>(
                     listener: (context, state) {
                       if (state is SendImageSuccessState) {
-                        //NavigatorHelper.navigateToLobbyScreen(context,widget.currentUser);
                         print(
                             'send image success state! navigate back to lobby...');
                         NavigatorHelper.navigateToLobbyScreen(

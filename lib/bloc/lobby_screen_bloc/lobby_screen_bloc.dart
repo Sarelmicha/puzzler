@@ -33,27 +33,29 @@ class LobbyScreenBloc extends Bloc<LobbyScreenEvent, LobbyScreenState> {
         //Here comes the logic of fetching data from Firebase
         await _askPermissions();
 
+
         print('before fecthing all contact from phone');
-        Iterable<Contact> contacts = await ContactsService.getContacts();
+        Iterable<Contact> contacts = await ContactsService.getContacts(withThumbnails: false);
         print('after fecthing all contact from phone');
 
         print('here 2');
 
-        List<Contact> phoneContactList = contacts.toList();
+
+        List<Contact> phoneContactsList = contacts.toList();
 
         //--------------- for print for tests--------------
-        for (int i = 0; i < phoneContactList.length; i++) {
-          print(phoneContactList[i].displayName);
+        for (int i = 0; i < phoneContactsList.length; i++) {
+          print(phoneContactsList[i].displayName);
         }
         //---------------------------------------
 
-        List<myContact.Contact> allContactWithApp = await
-            getAllContactWithApp(phoneContactList);
+        List<myContact.Contact> appContacts = await
+            getAllContactWithApp(phoneContactsList);
 
-        print(allContactWithApp);
+        print(appContacts);
 
         //List<Contact> contacts = await getContacts();
-        yield LobbyScreenReady(contacts: allContactWithApp);
+        yield LobbyScreenReady(contacts: appContacts);
       } catch (e) {
         if (Platform.isAndroid) {
           yield LobbyScreenFailure(message: e.message);
@@ -121,6 +123,7 @@ class LobbyScreenBloc extends Bloc<LobbyScreenEvent, LobbyScreenState> {
 
             if (phoneNumber == user.data['phoneNumber']) {
               print('im here!!');
+              print('contatc name display name is ${contact.displayName}');
               appContacts.add(myContact.Contact(
                   name: contact.displayName,
                   phoneNumber: phoneNumber,

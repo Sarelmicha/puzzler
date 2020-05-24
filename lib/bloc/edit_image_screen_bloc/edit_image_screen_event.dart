@@ -31,8 +31,10 @@ class SendButtonHasBeenPressed extends EditImageScreenEvent {
   final int totalTime;
   final int numOfPieces;
   final String senderPhoneNumber;
+  final int currentRotation;
+  final int currentColor;
 
-  SendButtonHasBeenPressed({this.receiverPhoneNumber,this.totalTime, this.numOfPieces, this.senderPhoneNumber});
+  SendButtonHasBeenPressed({this.receiverPhoneNumber,this.totalTime, this.numOfPieces, this.senderPhoneNumber,this.currentRotation,this.currentColor});
 
   @override
   List<Object> get props => null;

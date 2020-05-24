@@ -65,3 +65,20 @@ class FillCellSuccessState extends GameState {
   List<Object> get props => null;
 
 }
+
+class CantPlayState extends GameState {
+  @override
+  List<Object> get props => null;
+
+}
+
+class CanPlayState extends GameState {
+
+  final List<Cell> cells;
+  final List<ImagePiece> imagePieces;
+
+  CanPlayState({this.cells, this.imagePieces});
+  @override
+  List<Object> get props => null;
+
+}
