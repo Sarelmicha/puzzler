@@ -1,6 +1,8 @@
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:puzzlechat/data/game_data.dart';
 import 'package:puzzlechat/util/converter.dart';
 import 'package:uuid/uuid.dart';
@@ -16,13 +18,13 @@ class GameRepository {
     this.uuid = Uuid();
   }
 
-  Future<void> sendPuzzleGame(String receiverPhoneNumber, File imageFile, int totalTime,
+  Future<void> sendPuzzleGame(String receiverPhoneNumber,Uint8List image , int totalTime,
       int numOfRows, String senderPhoneNumber) async {
 
 
     //Fetching the image URL from the fireStorage
     String downloadImageUrl =
-        await saveImageFileToStorage(imageFile, senderPhoneNumber);
+        await saveImageFileToStorage(image, senderPhoneNumber);
 
     //Creating new game data.
     GameData gameData = GameData(
@@ -103,14 +105,15 @@ class GameRepository {
   }
 
   Future<String> saveImageFileToStorage(
-      File imageFile, String senderPhoneNumber) async {
+      Uint8List image, String senderPhoneNumber) async {
     //TODO - in futrue need to change the child id
 
+    print('senderPhoneNumber bitches $senderPhoneNumber');
     //Create a reference to the location you want to upload to in firebase
     StorageReference reference = _fireStorage.ref().child(senderPhoneNumber);
 
     //Upload the file to firebase
-    StorageUploadTask uploadTask = reference.putFile(imageFile);
+    StorageUploadTask uploadTask = reference.putData(image);
 
     StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
 

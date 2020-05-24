@@ -40,6 +40,12 @@ class SendImageSuccessState extends EditImageScreenState {
 
 }
 
+//class EditImageWaitingState extends EditImageScreenState {
+//  @override
+//  List<Object> get props => null;
+//
+//}
+
 
 class SendImageFailureState extends EditImageScreenState {
 

@@ -1,9 +1,13 @@
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image/image.dart';
+import 'package:puzzlechat/bloc/app_bar_bloc/app_bar_state.dart';
 import 'package:puzzlechat/bloc/edit_image_screen_bloc/edit_image_screen_event.dart';
 import 'package:puzzlechat/bloc/edit_image_screen_bloc/edit_image_screen_state.dart';
 import 'package:puzzlechat/bloc/edit_image_screen_bloc/image_event.dart';
+import 'package:puzzlechat/bloc/game_bloc/game_bloc.dart';
 import 'package:puzzlechat/repository/game_repository.dart';
 
 import '../../data/filter.dart';
@@ -81,18 +85,25 @@ class EditImageScreenBloc
       yield ChangePiecesSuccessState(numOfPieces: pieces[--currentPiecesIndex]);
     } else if (event is SendButtonHasBeenPressed)  {
 
+
+      yield SendImageSuccessState();
+
       print('sender phone number is ${event.senderPhoneNumber}');
 
      int convertedNumOfRows = convertFromPiecesToNumOfRows(event.numOfPieces);
 
+     print('image before save issssss ${GameBloc.convertImageToByteData(imageFile)}');
+
+      Uint8List convertedImage = GameBloc.convertImageToByteData(imageFile);
+
+      print('image is valid before save ${JpegDecoder().isValidFile(convertedImage)}');
+
       await _gameRepository.sendPuzzleGame(
           event.receiverPhoneNumber,
-          imageFile,
+          convertedImage,
           event.totalTime,
           convertedNumOfRows,
           event.senderPhoneNumber);
-
-      yield SendImageSuccessState();
 
     } else if (event is ParameterChangedEvent) {
       yield ChangeParametersSuccessState();

@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:puzzlechat/bloc/notification_bloc/notifcation_event.dart';
 import 'package:puzzlechat/bloc/notification_bloc/notification_bloc.dart';
@@ -8,15 +9,20 @@ class CardWidget extends StatelessWidget {
 
   final GameData cardData;
   final NotificationBloc notificationBloc;
+  final FirebaseUser currentUser;
 
-  CardWidget({this.cardData,this.notificationBloc});
+  CardWidget({this.cardData,this.notificationBloc, this.currentUser});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: (){
-        notificationBloc.add(GameHasBeenClicked(cardData.gameId));
-        //TODO - Start the game.
+        notificationBloc.add(
+            GameHasBeenClicked(
+               gameData: cardData,
+              currentUser : currentUser,
+            )
+        );
       },
       child: Padding(
         padding: EdgeInsets.all(10.0),

@@ -38,5 +38,12 @@ class ShowNotificationSuccess extends AppBarState {
 
 }
 
+class WaitingState extends AppBarState {
+
+  @override
+  List<Object> get props => null;
+
+}
+
 
 

@@ -16,13 +16,13 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   List<Cell> _cells = <Cell>[];
   List<ImagePiece> _imagePieces = <ImagePiece>[];
   List<ImagePiece> _orderImagePieces = <ImagePiece>[];
-  File imageFile;
+  Uint8List image;
 
   List<Cell> get cells => _cells;
   List<ImagePiece> get orderImagePieces => _orderImagePieces;
 
 
-  GameBloc({this.imageFile,this.numOfRows});
+  GameBloc({this.image,this.numOfRows});
 
   @override
   GameState get initialState => GameInitialState();
@@ -36,14 +36,11 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       print('before create cells');
       createCells();
       print('after create cells');
-      print('before convertImageToByteData');
-      Uint8List convertedImage = convertImageToByteData(imageFile);
+      print('before convertImageToByteData file is $image');
       print('after convertImageToByteData');
       print('before createImagePieces');
-      createImagePieces(convertedImage);
+      createImagePieces(image);
       print('after createImagePieces');
-
-
       print('here fter all initialze of puzzle!');
 
 
@@ -62,6 +59,12 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       } else {
         yield ContinueGameState(cells: _cells,imagePieces: _imagePieces);
       }
+    } else if(event is TimeHasPassedEvent) {
+      yield GameOverState(isUserWon: false);
+    } else if (event is GameIsReadyEvent){
+      yield CantPlayState();
+    } else if(event is PlayButtonHasBeenPressedEvent){
+      yield CanPlayState(cells: _cells, imagePieces: _imagePieces);
     }
   }
 
@@ -77,9 +80,13 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   void createImagePieces(Uint8List imageData) {
     print('now in fumc imageData is $imageData');
 
+    print('num of rows = $numOfRows');
+
     int numOfPieces = numOfRows * numOfRows;
 
     List<ClipRRect> images = splitImage(imageData);
+
+    print('im here mother fucker!!!');
 
     if (images.isEmpty) {
       return;
@@ -106,27 +113,46 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       return [];
     }
 
+    print('iinput is $input');
+
+    print('here 1');
     // convert image to image from image package
     imglib.Image image = imglib.decodeImage(input);
+
+    print('here 2');
+
+    print('image is =  $image');
 
     int x = 0, y = 0;
     int width = (image.width / numOfRows).round();
     int height = (image.height / numOfRows).round();
 
+    print('here 2.5');
+
     // split image to parts
     List<imglib.Image> parts = List<imglib.Image>();
+
+    print('here 3');
     for (int i = 0; i < numOfRows; i++) {
+      print('here 4');
       for (int j = 0; j < numOfRows; j++) {
         parts.add(imglib.copyCrop(image, x, y, width, height));
         x += width;
+        print('here 5');
       }
       x = 0;
       y += height;
     }
 
+    print('here 6');
+
     // convert image from image package to Image Widget to display
     List<ClipRRect> output = List<ClipRRect>();
+
+    print('here 7');
+
     for (var img in parts) {
+      print('here 8');
       output.add(ClipRRect(
         borderRadius: BorderRadius.circular(8.0),
         child: Image.memory(
@@ -135,11 +161,13 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         ),
       ));
     }
+    print('here 9');
 
     return output;
   }
 
   void _mixImages() {
+
     Random random = Random();
 
     for (int i = 0; i < _imagePieces.length; i++) {
@@ -150,7 +178,9 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     }
   }
 
-  Uint8List convertImageToByteData(File imageFile) {
+
+  //TODO - take it from here and put it only in the edit screen bloc!!! static just for tests
+  static Uint8List convertImageToByteData(File imageFile) {
     var byteData = imageFile.readAsBytesSync();
     return byteData;
   }

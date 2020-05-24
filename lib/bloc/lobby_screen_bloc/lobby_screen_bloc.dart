@@ -33,11 +33,13 @@ class LobbyScreenBloc extends Bloc<LobbyScreenEvent, LobbyScreenState> {
         //Here comes the logic of fetching data from Firebase
         await _askPermissions();
 
+
         print('before fecthing all contact from phone');
-        Iterable<Contact> contacts = await ContactsService.getContacts();
+        Iterable<Contact> contacts = await ContactsService.getContacts(withThumbnails: false);
         print('after fecthing all contact from phone');
 
         print('here 2');
+
 
         List<Contact> phoneContactsList = contacts.toList();
 
@@ -121,6 +123,7 @@ class LobbyScreenBloc extends Bloc<LobbyScreenEvent, LobbyScreenState> {
 
             if (phoneNumber == user.data['phoneNumber']) {
               print('im here!!');
+              print('contatc name display name is ${contact.displayName}');
               appContacts.add(myContact.Contact(
                   name: contact.displayName,
                   phoneNumber: phoneNumber,

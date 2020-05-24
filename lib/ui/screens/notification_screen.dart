@@ -10,6 +10,7 @@ import 'package:puzzlechat/bloc/lobby_screen_bloc/lobby_screen_event.dart';
 import 'package:puzzlechat/bloc/lobby_screen_bloc/lobby_screen_state.dart';
 import 'package:puzzlechat/bloc/notification_bloc/notification_bloc.dart';
 import 'package:puzzlechat/bloc/notification_bloc/notification_state.dart';
+import 'package:puzzlechat/data/contact.dart';
 import 'package:puzzlechat/data/game_data.dart';
 import 'package:puzzlechat/ui/widgets/card_list.dart';
 import 'package:puzzlechat/ui/widgets/contact_list.dart';
@@ -19,9 +20,10 @@ import 'package:puzzlechat/util/contstants.dart';
 class NotificationScreenParent extends StatelessWidget {
   final List<GameData> cardsData;
   final FirebaseUser currentUser;
+  final List<Contact> userContacts;
 
   NotificationScreenParent(
-      {@required this.cardsData, @required this.currentUser});
+      {@required this.cardsData, @required this.currentUser, this.userContacts});
 
   @override
   Widget build(BuildContext context) {
@@ -112,10 +114,26 @@ class _NotificationScreenState extends State<NotificationScreen> {
                 }
                 return Container();
               },
-              child: Center(
-                child: CardList(
+              child: BlocListener<NotificationBloc, NotificationState>(
+                listener: (context, notificationState) {
+                  if (notificationState is GameStartedState) {
+                    NavigatorHelper.navigateToGameScreenScreen(
+                        context,
+                        notificationState.image,
+                        int.parse(notificationState.totalTime),
+                        int.parse(notificationState.numOfRows),
+                        widget.currentUser
+                    );
+                  } else if(notificationState is NotificationWaitingState){
+                    NavigatorHelper.navigateToSplashScreen(context);
+                  }
+                },
+                child: Center(
+                  child: CardList(
                     cardsData: widget.cardsData,
                     notificationBloc: notificationBloc,
+                    currentUser: widget.currentUser,
+                  ),
                 ),
               ),
             ),
